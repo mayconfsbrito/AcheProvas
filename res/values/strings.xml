@@ -4,7 +4,9 @@
     <string name="app_name">AcheProvas</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="buscar">Buscar</string>
-    <string name="tituloResultado">Provas Encontradas</string>
+    <string name="search">Buscar</string>
+    <string name="resultTitle">Provas Encontradas</string>
+    <string name="completeSearch">Favor inserir a descrição para busca</string>
+    <string name="searching">Buscando ...</string>
 
 </resources>

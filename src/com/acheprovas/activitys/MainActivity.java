@@ -1,7 +1,5 @@
 package com.acheprovas.activitys;
 
-import ufop.smd.controle.Constantes;
-import ufop.smd.gui.activity.Opcoes;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,8 +7,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.acheprovas.R;
+import com.acheprovas.R.string;
+import com.acheprovas.libs.Constants;
 
 /**
  * Esta classe implementa a Activity da view "MainActivity", ou seja, a view de
@@ -43,22 +44,39 @@ public class MainActivity extends Activity {
 	 */
 	protected void initComponents() {
 
-		//Instancía os componentes gráficos
+		// Instancía os componentes gráficos
 		this.setEtBuscar((EditText) findViewById(R.id.etBuscar));
 		this.setBtBuscar((Button) findViewById(R.id.btBuscar));
-		
-		//Define os eventos de cada componente
+
+		// Define os eventos de cada componente
 		this.btBuscar.setOnClickListener(new OnClickListener() {
-			
+
+			/**
+			 * Evento gerado ao clicar no botão de busca da view
+			 */
 			@Override
 			public void onClick(View v) {
-				Intent it = new Intent(this, ListaProvasActivity.class);
-				startActivityForResult(it, 0);
-				
+
+				String strBusca = etBuscar.getText().toString();
+
+				// O texto para busca foi preenchido?
+				if (strBusca.length() > 0) {
+
+					// Cria uma nova intent com a string inserida e envia para a
+					// activity de resultado de busca
+					Intent it = new Intent(getBaseContext(),
+							ListaProvasActivity.class);
+					it.putExtra("strConsulta", strBusca);
+					startActivityForResult(it, 0);
+					Toast.makeText(getBaseContext(), strBusca, Constants.TEMPO_TOAST).show();
+					
+					
+				} else {
+					Toast.makeText(getBaseContext(), string.completeSearch, Constants.TEMPO_TOAST).show();
+				}
 			}
 		});
-		
-		this.etBuscar.setText("Hellow!!!");
+
 	}
 
 	/**

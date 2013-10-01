@@ -24,6 +24,6 @@
         android:layout_below="@+id/etBuscar"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
-        android:text="@string/buscar" />
+        android:text="@string/search" />
 
 </RelativeLayout>
