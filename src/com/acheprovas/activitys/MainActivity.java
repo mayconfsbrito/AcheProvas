@@ -1,8 +1,14 @@
 package com.acheprovas.activitys;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -27,6 +33,7 @@ public class MainActivity extends Activity {
 	 */
 	private EditText etBuscar;
 	private Button btBuscar;
+	private ProgressDialog pd;
 
 	/**
 	 * Implementa as ações a serem executadas assim que a activity é criada
@@ -37,6 +44,7 @@ public class MainActivity extends Activity {
 
 		this.setContentView(R.layout.activity_main);
 		this.initComponents();
+
 	}
 
 	/**
@@ -47,36 +55,98 @@ public class MainActivity extends Activity {
 		// Instancía os componentes gráficos
 		this.setEtBuscar((EditText) findViewById(R.id.etBuscar));
 		this.setBtBuscar((Button) findViewById(R.id.btBuscar));
+		
 
-		// Define os eventos de cada componente
+		// Declara o evento OnClick do botão
 		this.btBuscar.setOnClickListener(new OnClickListener() {
 
-			/**
-			 * Evento gerado ao clicar no botão de busca da view
-			 */
 			@Override
 			public void onClick(View v) {
 
 				String strBusca = etBuscar.getText().toString();
 
-				// O texto para busca foi preenchido?
-				if (strBusca.length() > 0) {
+				// Existe internet disponível?
+				if (isNetworkAvailable()) {
 
-					// Cria uma nova intent com a string inserida e envia para a
-					// activity de resultado de busca
-					Intent it = new Intent(getBaseContext(),
-							ListaProvasActivity.class);
-					it.putExtra("strConsulta", strBusca);
-					startActivityForResult(it, 0);
-					Toast.makeText(getBaseContext(), strBusca, Constants.TEMPO_TOAST).show();
-					
-					
-				} else {
-					Toast.makeText(getBaseContext(), string.completeSearch, Constants.TEMPO_TOAST).show();
+					// O texto para busca foi preenchido?
+					if (strBusca.length() > 0) {
+						
+						
+						// Cria uma nova intent com a string inserida e envia para a activity de resultado de busca
+						Intent it = new Intent(getBaseContext(),
+						ListaProvasActivity.class);
+						it.putExtra("strBusca", strBusca);
+						
+						
+						startActivityForResult(it, 0);
+						
+						
+						
+					} 
 				}
+
 			}
 		});
+		
+		//Declara o evento 
+		etBuscar.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+				
+				//O EditText foi preenchido com pelo menos um caracter?
+				if(etBuscar.getText().length() > 0){
+					
+					//Desbloqueia o botão de submissão
+					btBuscar.setEnabled(true);
+					
+					
+				} // O EditText está vazio
+				else{
+					// Bloqueia o botão de submissão
+					btBuscar.setEnabled(false);
+					
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+					int arg3) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 
+	}
+
+	/**
+	 * Verifica se o dispositivo está com internet disponível
+	 * 
+	 * @return true se existir conectividade ou false em caso negativo
+	 */
+	public boolean isNetworkAvailable() {
+
+		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+		// if no network is available networkInfo will be null
+		// otherwise check if we are connected
+		if (networkInfo != null && networkInfo.isConnected()) {
+			return true;
+		}
+
+		// Exibe uma mensagem ao usuário
+		Toast.makeText(getBaseContext(), string.noInternet,
+				Constants.TEMPO_TOAST).show();
+
+		return false;
 	}
 
 	/**
