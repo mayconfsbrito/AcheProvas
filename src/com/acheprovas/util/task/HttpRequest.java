@@ -23,13 +23,9 @@ public class HttpRequest extends
 		AsyncTask<URL, Void, ArrayList<HashMap<String, String>>> {
 
 	private String strBusca;
-	private ProgressDialog pd;
-	private Context context;
 
-	public HttpRequest(String strBusca, ProgressDialog pd, Context v) {
+	public HttpRequest(String strBusca) {
 		this.strBusca = strBusca;
-		this.pd = pd;
-		this.context = v;
 	}
 
 	/**
