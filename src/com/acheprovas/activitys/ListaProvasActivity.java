@@ -13,6 +13,9 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 import com.acheprovas.R;
 import com.acheprovas.libs.Constants;
 import com.acheprovas.util.json.JSONParser;
+import com.acheprovas.util.task.DownloadTask;
 
 /**
  * Lista o resultado da busca efetuada pelo servidor
@@ -55,13 +59,14 @@ public class ListaProvasActivity extends ListActivity {
 		pd.setCancelable(false);
 		pd.show();
 
-		//Executa a busca da prova através de uma AsynkTask
+		// Executa a busca da prova através de uma AsynkTask
 		new ListaProvasTask().execute();
 
 	}
 
 	@Override
 	protected void onPause() {
+		super.onPause();
 		pd.dismiss();
 	}
 
@@ -79,8 +84,8 @@ public class ListaProvasActivity extends ListActivity {
 		ArrayList<HashMap<String, String>> listProvas = null;
 
 		// Monta a URL
-		String strUrl = "http://acheprovas.com/api/api.php?termo="
-				+ strBusca + "&enviar=Buscar+prova";
+		String strUrl = "http://acheprovas.com/api/api.php?termo=" + strBusca
+				+ "&enviar=Buscar+prova";
 
 		try {
 
@@ -89,9 +94,8 @@ public class ListaProvasActivity extends ListActivity {
 
 			// Monta a url a ser submetida
 			url = new URL(strUrl);
-			uri = new URI(url.getProtocol(), url.getUserInfo(),
-					url.getHost(), url.getPort(), url.getPath(),
-					url.getQuery(), url.getRef());
+			uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(),
+					url.getPort(), url.getPath(), url.getQuery(), url.getRef());
 
 			// Busca o objeto JSON apartir da url construída
 			JSONObject json = jParser.getJSONFromUrl(uri.toString());
@@ -103,17 +107,14 @@ public class ListaProvasActivity extends ListActivity {
 				listProvas = new ArrayList<HashMap<String, String>>();
 
 				// Captura o array de nomes
-				JSONArray jsonArray = json
-						.getJSONArray(Constants.JSON_ARRAY);
+				JSONArray jsonArray = json.getJSONArray(Constants.JSON_ARRAY);
 
 				// Percorre o Array JSON
 				for (int index = 0; index < jsonArray.length(); index++) {
 					JSONObject obj = jsonArray.getJSONObject(index);
 
-					// Armazena cada item json em um novo HashMap
 					HashMap<String, String> map = new HashMap<String, String>();
-					map.put(Constants.TAG_ID,
-							obj.getString(Constants.TAG_ID));
+					map.put(Constants.TAG_ID, obj.getString(Constants.TAG_ID));
 					map.put(Constants.TAG_NOME,
 							obj.getString(Constants.TAG_NOME));
 					map.put(Constants.TAG_DESC,
@@ -152,6 +153,8 @@ public class ListaProvasActivity extends ListActivity {
 							R.id.text2 });
 			setListAdapter(adapter);
 
+			// Define o evento onClick de download para cada componente da lista
+			// exibida (cada prova)
 			getListView().setOnItemClickListener(new OnItemClickListener() {
 
 				@Override
@@ -165,6 +168,11 @@ public class ListaProvasActivity extends ListActivity {
 					Toast.makeText(getBaseContext(),
 							"Baixando a prova " + map.get(Constants.TAG_NOME),
 							Constants.TEMPO_TOAST).show();
+
+					
+					// execute this when the downloader must be fired
+					final DownloadTask downloadTask = new DownloadTask(ListaProvasActivity.this);
+					downloadTask.execute("http://www.education.gov.yk.ca/pdf/pdf-test.pdf");
 
 				}
 
@@ -190,14 +198,12 @@ public class ListaProvasActivity extends ListActivity {
 			// Busca na API online do ache provas o resultado do termo de busca
 			array = search();
 
-			
-
 			return null;
 		}
-		
+
 		/**
-		 * Executa o preocedimento de listagem das provas ao final
-		 * da execução da thread
+		 * Executa o preocedimento de listagem das provas ao final da execução
+		 * da thread
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
@@ -205,12 +211,11 @@ public class ListaProvasActivity extends ListActivity {
 			// Imprime o resultado da busca nesta ListActivity
 			listItens(array);
 
-			//Remove o ProgressDialog caso ele esteja sendo exibido
-			if(pd != null && pd.isShowing()){
+			// Remove o ProgressDialog caso ele esteja sendo exibido
+			if (pd != null && pd.isShowing()) {
 				pd.dismiss();
 			}
-			
-			
+
 		}
 
 	}

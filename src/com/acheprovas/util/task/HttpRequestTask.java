@@ -11,20 +11,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.os.AsyncTask;
-import android.view.View;
-
 import com.acheprovas.libs.Constants;
 import com.acheprovas.util.json.JSONParser;
 
-public class HttpRequest extends
+public class HttpRequestTask extends
 		AsyncTask<URL, Void, ArrayList<HashMap<String, String>>> {
 
 	private String strBusca;
 
-	public HttpRequest(String strBusca) {
+	public HttpRequestTask(String strBusca) {
 		this.strBusca = strBusca;
 	}
 

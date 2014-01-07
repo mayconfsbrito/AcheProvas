@@ -16,4 +16,7 @@ public class Constants {
 	
 	// Array JSON de resultados
 	public JSONArray resultado = null; 
+	
+	//Constantes contendo os diretorios do sistema
+	public static final String DIRETORIO_PROVAS = "/com.acheprovas/provas/prova_name.pdf";
 }
