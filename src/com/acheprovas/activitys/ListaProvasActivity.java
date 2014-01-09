@@ -1,5 +1,10 @@
 package com.acheprovas.activitys;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -13,11 +18,13 @@ import org.json.JSONObject;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.PowerManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -40,6 +47,7 @@ import com.acheprovas.util.task.DownloadTask;
 public class ListaProvasActivity extends ListActivity {
 
 	protected static ProgressDialog pd;
+	protected ProgressDialog mProgressDialog;
 	protected static ArrayList<HashMap<String, String>> array = null;
 
 	/**
@@ -165,14 +173,31 @@ public class ListaProvasActivity extends ListActivity {
 							.getItem(position);
 
 					// String nome = listItem.getString(Constants.TAG_NOME);
-					Toast.makeText(getBaseContext(),
-							"Baixando a prova " + map.get(Constants.TAG_NOME),
-							Constants.TEMPO_TOAST).show();
+					// Toast.makeText(getBaseContext(),
+					// "Baixando a prova " + map.get(Constants.TAG_NOME),
+					// Constants.TEMPO_TOAST).show();
 
-					
+					mProgressDialog = new ProgressDialog(
+							ListaProvasActivity.this);
+					mProgressDialog.setMessage("Baixando a prova");
+					mProgressDialog.setIndeterminate(true);
+					mProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					mProgressDialog.setCancelable(true);
+
 					// execute this when the downloader must be fired
-					final DownloadTask downloadTask = new DownloadTask(ListaProvasActivity.this);
-					downloadTask.execute("http://www.education.gov.yk.ca/pdf/pdf-test.pdf");
+					final DownloadTask downloadTask = new DownloadTask(
+							ListaProvasActivity.this, mProgressDialog);
+					downloadTask
+							.execute("http://www.education.gov.yk.ca/pdf/pdf-test.pdf");
+
+					mProgressDialog
+							.setOnCancelListener(new DialogInterface.OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									downloadTask.cancel(true);
+								}
+							});
 
 				}
 
