@@ -17,11 +17,17 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.acheprovas.activitys.ListaProvasActivity;
 import com.acheprovas.libs.Constants;
+import com.acheprovas.model.Prova;
+
+/**
+ * 
+ * @author mayconfsbrito
+ *
+ */
 
 @SuppressLint({ "ShowToast", "Wakelock" })
-public class DownloadTask extends AsyncTask<String, Integer, String> {
+public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 	private Context context;
 	private String resultado;
@@ -32,20 +38,26 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 		this.mProgressDialog = mProgressDialog;
 	}
 
+	/**
+	 * Método de execução da thread. Realiza de forma independete o download de
+	 * uma determinada prova.
+	 * 
+	 * Artigo Referência:
+	 * http://stackoverflow.com/questions/3028306/download-a-file
+	 * -with-android-and-showing-the-progress-in-a-progressdialog
+	 */
 	@Override
-	protected String doInBackground(String... strUrl) {
+	protected String doInBackground(Prova... prova) {
 
-		// Artigo
-		// http://stackoverflow.com/questions/3028306/download-a-file-with-android-and-showing-the-progress-in-a-progressdialog
-
-		// take CPU lock to prevent CPU from going off if the user
-		// presses the power button during download
+		// Previne que a CPU seja desligada caso o usuário pressione o botão de
+		// desligar durante o download
 		PowerManager pm = (PowerManager) context
 				.getSystemService(Context.POWER_SERVICE);
 		PowerManager.WakeLock wl = pm.newWakeLock(
 				PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
 		wl.acquire();
 
+		// Inicializa variáveis de conexão
 		InputStream input = null;
 		OutputStream output = null;
 		HttpURLConnection connection = null;
@@ -53,58 +65,61 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 
 		try {
 
-			URL url = new URL(
-					"http://acheprovas.com/provas/ufop/(2008)%20UFOP%20-%20Primeira%20Etapa.zip");
+			//Inicializa a conexão para download da prova
+			String urlProva = prova[0].getLink().replaceAll(" ", "%20");
+			Log.d(null, "Baixando a prova: " + urlProva);
+			URL url = new URL(urlProva);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setDoOutput(true);
 			connection.connect();
 
-			// expect HTTP 200 OK, so we don't mistakenly save error report
-			// instead of the file
+			// Aguarda um response request HTTP 200 OK, pois em caso positivo
+			// reporta o erro
 			if (connection.getResponseCode() != HttpURLConnection.HTTP_OK)
 				return "Server returned HTTP " + connection.getResponseCode()
 						+ " " + connection.getResponseMessage();
 
-			// this will be useful to display download percentage
-			// might be -1: server did not report the length
+			// Exibe a porcentagem do download
+			// Será -1 caso o servidor não retorne um tamanho para o arquivo
 			int fileLength = connection.getContentLength();
 
-			// download the file
+			// Realiza o download do arquivo
 			input = connection.getInputStream();
-			output = new FileOutputStream(
-					Environment
-							.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-							+ "/prova.zip");
+			File dir = new File(Environment.getExternalStorageDirectory()
+					+ Constants.DIRETORIO_PROVAS);
+			dir.mkdirs(); // Cria o diretório para salvar o arquivo
+			Log.d(null, dir.getAbsolutePath());
+			output = new FileOutputStream(new File(dir, "/" + prova[0].getNome() + ".zip")); //Endereço aonde o arquivo da prova será gravado
 
+			//Grava o download em um arquivo byte a byte através de um buffer
 			byte data[] = new byte[4096];
 			long total = 0;
 			int count;
 			while ((count = input.read(data)) != -1) {
-				// allow canceling with back button
-				if (isCancelled())
+				// Permite cancelamento com o botão voltar
+				if (isCancelled()) {
 					return null;
+				}
 				total += count;
-				// publishing the progress....
-				if (fileLength > 0) // only if total length is known
+				// Publicando o progresso no ProgressBar
+				if (fileLength > 0) { // Se o tamanho total do arquivo for
+										// conhecido
 					publishProgress((int) (total * 100 / fileLength));
+				}
 				output.write(data, 0, count);
 			}
-
-			resultado = "Prova baixada com sucesso!";
 
 		} catch (IOException e) {
 			e.printStackTrace();
 
-			Log.d(null, "Teste 0");
-			resultado = "Erro de escrita ao baixar a prova! Verifique se existe espaço em disco ou permissão de escrita em sua pasta de downloads.";
-
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			resultado = "Erro ao baixar prova!";
 		} finally {
 			try {
+				// Fecha os Buffers de escrita e envio de informações através da
+				// conexão
 				if (output != null)
 					output.close();
 				if (input != null)
@@ -112,6 +127,7 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 			} catch (IOException ignored) {
 			}
 
+			// Fecha a conexão do download
 			if (connection != null)
 				connection.disconnect();
 
@@ -121,29 +137,40 @@ public class DownloadTask extends AsyncTask<String, Integer, String> {
 		return null;
 
 	}
-	
+
+	/**
+	 * Exibe o ProgressBar ao iniciar a execução da thread
+	 */
 	@Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        mProgressDialog.show();
-    }
+	protected void onPreExecute() {
+		super.onPreExecute();
+		mProgressDialog.show();
+	}
 
-    @Override
-    protected void onProgressUpdate(Integer... progress) {
-        super.onProgressUpdate(progress);
-        // if we get here, length is known, now set indeterminate to false
-        mProgressDialog.setIndeterminate(false);
-        mProgressDialog.setMax(100);
-        mProgressDialog.setProgress(progress[0]);
-    }
+	/**
+	 * Atualiza o progresso do download através no ProgressBar
+	 */
+	@Override
+	protected void onProgressUpdate(Integer... progress) {
+		super.onProgressUpdate(progress);
 
-    @Override
-    protected void onPostExecute(String result) {
-        mProgressDialog.dismiss();
-        if (result != null)
-            Toast.makeText(context,"Download error: "+result, Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(context,"File downloaded", Toast.LENGTH_SHORT).show();
-    }
-	
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setMax(100);
+		mProgressDialog.setProgress(progress[0]);
+	}
+
+	/**
+	 * Realiza a atualização da publicação ao encerrar a execução do download
+	 */
+	@Override
+	protected void onPostExecute(String result) {
+		mProgressDialog.dismiss();
+		if (result != null)
+			Toast.makeText(context, "Download error: " + result,
+					Toast.LENGTH_LONG).show();
+		else
+			Toast.makeText(context, "Prova baixada com sucesso!",
+					Toast.LENGTH_SHORT).show();
+	}
+
 }

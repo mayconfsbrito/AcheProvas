@@ -18,5 +18,5 @@ public class Constants {
 	public JSONArray resultado = null; 
 	
 	//Constantes contendo os diretorios do sistema
-	public static final String DIRETORIO_PROVAS = "/provas/";
+	public static final String DIRETORIO_PROVAS = "/com.acheprovas/provas/";
 }

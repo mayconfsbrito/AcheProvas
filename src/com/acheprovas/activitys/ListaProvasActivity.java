@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 import com.acheprovas.R;
 import com.acheprovas.libs.Constants;
+import com.acheprovas.model.Prova;
 import com.acheprovas.util.json.JSONParser;
 import com.acheprovas.util.task.DownloadTask;
 
@@ -171,11 +172,7 @@ public class ListaProvasActivity extends ListActivity {
 
 					HashMap<String, String> map = (HashMap<String, String>) getListAdapter()
 							.getItem(position);
-
-					// String nome = listItem.getString(Constants.TAG_NOME);
-					// Toast.makeText(getBaseContext(),
-					// "Baixando a prova " + map.get(Constants.TAG_NOME),
-					// Constants.TEMPO_TOAST).show();
+					Prova prova = new Prova(map);
 
 					mProgressDialog = new ProgressDialog(
 							ListaProvasActivity.this);
@@ -183,13 +180,12 @@ public class ListaProvasActivity extends ListActivity {
 					mProgressDialog.setIndeterminate(true);
 					mProgressDialog
 							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					mProgressDialog.setCancelable(true);
+					mProgressDialog.setCancelable(false);
 
 					// execute this when the downloader must be fired
 					final DownloadTask downloadTask = new DownloadTask(
 							ListaProvasActivity.this, mProgressDialog);
-					downloadTask
-							.execute("http://www.education.gov.yk.ca/pdf/pdf-test.pdf");
+					downloadTask.execute(prova);
 
 					mProgressDialog
 							.setOnCancelListener(new DialogInterface.OnCancelListener() {

@@ -23,7 +23,7 @@ import com.acheprovas.libs.Constants;
  * Esta classe implementa a Activity da view "MainActivity", ou seja, a view de
  * introdução da aplicação.
  * 
- * @author Maycon Brito
+ * @author mayconfsbrito
  * @since 14/09/2013
  */
 public class MainActivity extends Activity {

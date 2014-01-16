@@ -1,8 +1,17 @@
 package com.acheprovas.model;
 
+import java.util.HashMap;
+import com.acheprovas.libs.Constants;
+
+/**
+ * 
+ * @author mayconfsbrito
+ *
+ */
+
 public class Prova {
 
-	private int id;
+	private Integer id;
 	private String nome;
 	private String descricao;
 	private String link;
@@ -13,6 +22,15 @@ public class Prova {
 		this.setNome(nome);
 		this.setDescricao(descricao);
 		this.setLink(link);
+	}
+	
+	public Prova(HashMap<String, String> map){
+		
+		this.id = Integer.parseInt(map.get(Constants.TAG_ID));
+		this.nome = map.get(Constants.TAG_NOME);
+		this.descricao = map.get(Constants.TAG_DESC);
+		this.link = map.get(Constants.TAG_LINK);
+		
 	}
 	
 	public int getId() {
