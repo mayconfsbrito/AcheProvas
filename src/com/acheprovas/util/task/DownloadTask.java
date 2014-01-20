@@ -19,11 +19,12 @@ import android.widget.Toast;
 
 import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
+import com.acheprovas.util.Decompress;
 
 /**
  * 
  * @author mayconfsbrito
- *
+ * 
  */
 
 @SuppressLint({ "ShowToast", "Wakelock" })
@@ -65,7 +66,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 		try {
 
-			//Inicializa a conexão para download da prova
+			// Inicializa a conexão para download da prova
 			String urlProva = prova[0].getLink().replaceAll(" ", "%20");
 			Log.d(null, "Baixando a prova: " + urlProva);
 			URL url = new URL(urlProva);
@@ -86,13 +87,19 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 			// Realiza o download do arquivo
 			input = connection.getInputStream();
-			File dir = new File(Environment.getExternalStorageDirectory()
-					+ Constants.DIRETORIO_PROVAS);
-			dir.mkdirs(); // Cria o diretório para salvar o arquivo
-			Log.d(null, dir.getAbsolutePath());
-			output = new FileOutputStream(new File(dir, "/" + prova[0].getNome() + ".zip")); //Endereço aonde o arquivo da prova será gravado
+			String enderecoDiretorio = Environment
+					.getExternalStorageDirectory() + Constants.DIRETORIO_PROVAS;
+			String enderecoArquivo = enderecoDiretorio + prova[0].getNome()
+					+ ".zip";
+			File diretorio = new File(enderecoDiretorio);
+			File arquivo = new File(diretorio, prova[0].getNome()
+					+ ".zip");
+			diretorio.mkdirs(); // Cria o diretório para salvar o arquivo
+			Log.d(null, diretorio.getAbsolutePath());
+			output = new FileOutputStream(arquivo); // Endereço aonde o arquivo
+													// da prova será gravado
 
-			//Grava o download em um arquivo byte a byte através de um buffer
+			// Grava o download em um arquivo byte a byte através de um buffer
 			byte data[] = new byte[4096];
 			long total = 0;
 			int count;
@@ -109,6 +116,12 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 				}
 				output.write(data, 0, count);
 			}
+
+			// Descompactando o arquivo baixado
+			publishProgress(-1); //Envia um token (-1) para indicar a mudança da mensagem no ProgressBar
+			Decompress d = new Decompress(enderecoArquivo, enderecoDiretorio);
+			d.unzip();
+			Log.d(null, "Arquivos descompactados com sucesso!");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -154,9 +167,15 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	protected void onProgressUpdate(Integer... progress) {
 		super.onProgressUpdate(progress);
 
-		mProgressDialog.setIndeterminate(false);
-		mProgressDialog.setMax(100);
-		mProgressDialog.setProgress(progress[0]);
+		//O inteiro recebido é um token (-1) para mudar a mensagem?
+		if (progress[0] != -1) {
+			mProgressDialog.setIndeterminate(false);
+			mProgressDialog.setMax(100);
+			mProgressDialog.setProgress(progress[0]);
+		} else {
+			mProgressDialog.setMessage("Descompactando arquivos!");
+		}
+		
 	}
 
 	/**
