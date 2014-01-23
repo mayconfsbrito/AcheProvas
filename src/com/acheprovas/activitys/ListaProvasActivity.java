@@ -1,10 +1,5 @@
 package com.acheprovas.activitys;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -16,23 +11,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.PowerManager;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import com.acheprovas.R;
+import com.acheprovas.activitys.adapters.ArrayAdapterGenerico;
 import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
 import com.acheprovas.util.json.JSONParser;
@@ -45,11 +38,12 @@ import com.acheprovas.util.task.DownloadTask;
  * @since 14/09/2013
  * 
  */
-public class ListaProvasActivity extends ListActivity {
+public class ListaProvasActivity extends Activity {
 
 	protected static ProgressDialog pd;
 	protected ProgressDialog mProgressDialog;
 	protected static ArrayList<HashMap<String, String>> array = null;
+	protected ListView listView;
 
 	/**
 	 * Implementa as ações a serem executadas assim que a activity é criada
@@ -151,59 +145,6 @@ public class ListaProvasActivity extends ListActivity {
 	}
 
 	/**
-	 * Lista o resultado da busca na tela
-	 */
-	public void listItens(ArrayList<HashMap<String, String>> array) {
-
-		if (array != null) {
-			ListAdapter adapter = new SimpleAdapter(this, array,
-					R.layout.lista_provas, new String[] { Constants.TAG_NOME,
-							Constants.TAG_DESC }, new int[] { R.id.text1,
-							R.id.text2 });
-			setListAdapter(adapter);
-
-			// Define o evento onClick de download para cada componente da lista
-			// exibida (cada prova)
-			getListView().setOnItemClickListener(new OnItemClickListener() {
-
-				@Override
-				public void onItemClick(AdapterView<?> parent, View view,
-						int position, long id) {
-
-					HashMap<String, String> map = (HashMap<String, String>) getListAdapter()
-							.getItem(position);
-					Prova prova = new Prova(map);
-
-					mProgressDialog = new ProgressDialog(
-							ListaProvasActivity.this);
-					mProgressDialog.setMessage("Baixando a prova");
-					mProgressDialog.setIndeterminate(true);
-					mProgressDialog
-							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					mProgressDialog.setCancelable(false);
-
-					// execute this when the downloader must be fired
-					final DownloadTask downloadTask = new DownloadTask(
-							ListaProvasActivity.this, mProgressDialog);
-					downloadTask.execute(prova);
-
-					mProgressDialog
-							.setOnCancelListener(new DialogInterface.OnCancelListener() {
-								@Override
-								public void onCancel(DialogInterface dialog) {
-									downloadTask.cancel(true);
-								}
-							});
-
-				}
-
-			});
-
-		}
-
-	}
-
-	/**
 	 * Classe Interna que implementa a AsyncTask para busca e listagem de provas
 	 * 
 	 * @author maycon
@@ -240,4 +181,60 @@ public class ListaProvasActivity extends ListActivity {
 		}
 
 	}
+
+	/**
+	 * Lista o resultado da busca na tela
+	 */
+	public void listItens(final ArrayList<HashMap<String, String>> array) {
+
+		if (array != null) {
+
+			// Inicializa a listView e Liga ela ao seu ArrayAdapter
+			this.listView = (ListView) findViewById(R.id.listview);
+			ArrayAdapterGenerico arrayAdapter = new ArrayAdapterGenerico(this,
+					R.layout.target_item, array);
+			listView.setAdapter(arrayAdapter);
+
+			// Define o evento onClick de download para cada componente da lista
+			// exibida (cada prova)
+			this.listView.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> parent, View view,
+						int position, long id) {
+
+					HashMap<String, String> map = (HashMap<String, String>) array
+							.get(position);
+
+					Prova prova = new Prova(map);
+
+					mProgressDialog = new ProgressDialog(
+							ListaProvasActivity.this);
+					mProgressDialog.setMessage("Baixando a prova");
+					mProgressDialog.setIndeterminate(true);
+					mProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					mProgressDialog.setCancelable(false);
+
+					// execute this when the downloader must be fired
+					final DownloadTask downloadTask = new DownloadTask(
+							ListaProvasActivity.this, mProgressDialog);
+					downloadTask.execute(prova);
+
+					mProgressDialog
+							.setOnCancelListener(new DialogInterface.OnCancelListener() {
+								@Override
+								public void onCancel(DialogInterface dialog) {
+									downloadTask.cancel(true);
+								}
+							});
+
+				}
+
+			});
+
+		}
+
+	}
+
 }

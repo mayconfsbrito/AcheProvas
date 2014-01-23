@@ -92,8 +92,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			String enderecoArquivo = enderecoDiretorio + prova[0].getNome()
 					+ ".zip";
 			File diretorio = new File(enderecoDiretorio);
-			File arquivo = new File(diretorio, prova[0].getNome()
-					+ ".zip");
+			File arquivo = new File(diretorio, prova[0].getNome() + ".zip");
 			diretorio.mkdirs(); // Cria o diretório para salvar o arquivo
 			Log.d(null, diretorio.getAbsolutePath());
 			output = new FileOutputStream(arquivo); // Endereço aonde o arquivo
@@ -116,12 +115,6 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 				}
 				output.write(data, 0, count);
 			}
-
-			// Descompactando o arquivo baixado
-			publishProgress(-1); //Envia um token (-1) para indicar a mudança da mensagem no ProgressBar
-			Decompress d = new Decompress(enderecoArquivo, enderecoDiretorio);
-			d.unzip();
-			Log.d(null, "Arquivos descompactados com sucesso!");
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -167,15 +160,10 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	protected void onProgressUpdate(Integer... progress) {
 		super.onProgressUpdate(progress);
 
-		//O inteiro recebido é um token (-1) para mudar a mensagem?
-		if (progress[0] != -1) {
-			mProgressDialog.setIndeterminate(false);
-			mProgressDialog.setMax(100);
-			mProgressDialog.setProgress(progress[0]);
-		} else {
-			mProgressDialog.setMessage("Descompactando arquivos!");
-		}
-		
+		mProgressDialog.setIndeterminate(false);
+		mProgressDialog.setMax(100);
+		mProgressDialog.setProgress(progress[0]);
+
 	}
 
 	/**
@@ -184,12 +172,16 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		mProgressDialog.dismiss();
-		if (result != null)
+		if (result != null) {
 			Toast.makeText(context, "Download error: " + result,
 					Toast.LENGTH_LONG).show();
-		else
+
+			Log.e(null, "Download error: " + result);
+
+		} else {
 			Toast.makeText(context, "Prova baixada com sucesso!",
 					Toast.LENGTH_SHORT).show();
+		}
 	}
 
 }
