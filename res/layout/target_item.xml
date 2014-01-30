@@ -14,26 +14,11 @@
         android:src="@drawable/ic_zip" />
 
     <TextView
-        android:id="@+id/tvDesc"
-        android:layout_width="fill_parent"
-        android:layout_height="26dip"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_toRightOf="@id/icon"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:text="Description"
-        android:textSize="12sp" />
-
-    <TextView
         android:id="@+id/tvNome"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/tvDesc"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignWithParentIfMissing="true"
-        android:layout_toRightOf="@id/icon"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/icon"
         android:gravity="center_vertical"
         android:textSize="18sp" />
 

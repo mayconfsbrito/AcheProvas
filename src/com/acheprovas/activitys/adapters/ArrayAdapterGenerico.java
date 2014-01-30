@@ -45,10 +45,10 @@ public class ArrayAdapterGenerico extends ArrayAdapter<HashMap<String, String>> 
 		}
 		
 		TextView tv1 = (TextView) vView.findViewById(R.id.tvNome);
-		TextView tv2 = (TextView) vView.findViewById(R.id.tvDesc);
+//		TextView tv2 = (TextView) vView.findViewById(R.id.tvDesc);
 		
 		tv1.setText(getItem(pos).get(Constants.TAG_NOME));
-		tv2.setText(getItem(pos).get(Constants.TAG_DESC));
+//		tv2.setText(getItem(pos).get(Constants.TAG_DESC));
 		
 		return vView;
 

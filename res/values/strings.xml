@@ -2,11 +2,12 @@
 <resources>
 
     <string name="app_name">AcheProvas</string>
-    <string name="search">Buscar</string>
-    <string name="resultTitle">Provas Encontradas</string>
-    <string name="completeSearch">Favor inserir a descrição para busca</string>
-    <string name="searching">Buscando ...</string>
+    <string name="buscar">Buscar</string>
+    <string name="amazenadas">Armazenadas</string>
+    <string name="provas_enc">Provas Encontradas</string>
+    <string name="busca_completa">Favor inserir a descrição para busca</string>
+    <string name="buscando">Buscando ...</string>
     <string name="noInternet">Internet Indisponível</string>
-    <string name="downloading">Baixando a prova </string>
+    <string name="baixando">Baixando a prova </string>
 
 </resources>

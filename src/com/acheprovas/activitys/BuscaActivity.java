@@ -9,6 +9,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,7 +28,7 @@ import com.acheprovas.libs.Constants;
  * @author mayconfsbrito
  * @since 14/09/2013
  */
-public class MainActivity extends Activity {
+public class BuscaActivity extends Activity {
 
 	/**
 	 * Variáveis da classe que representam componentes gráficos da view
@@ -42,9 +44,21 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		this.setContentView(R.layout.activity_main);
+		this.setContentView(R.layout.busca_provas);
 		this.initComponents();
 
+	}
+	
+	/**
+	 * Infla as açoes da action bar desta view
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.busca_activity_actions, menu);
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/**

@@ -11,9 +11,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="7"
         android:targetSdkVersion="19" />
-    
 
     <application
         android:allowBackup="true"
@@ -21,7 +20,7 @@
         android:label="@string/app_name"
         android:theme="@style/acheprovas" >
         <activity
-            android:name="com.acheprovas.activitys.MainActivity"
+            android:name="com.acheprovas.activitys.BuscaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme" >
@@ -31,8 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.acheprovas.activitys.ListaProvasActivity" android:label="@string/resultTitle"></activity>
-        
+        <activity android:name="com.acheprovas.activitys.ListaProvasActivity" android:label="@string/provas_enc" android:theme="@style/FullscreenTheme"></activity>
+        <activity android:name="com.acheprovas.activitys.ProvasActivity" android:label="@string/provas_enc" android:theme="@style/FullscreenTheme"></activity>
         
     </application>
 

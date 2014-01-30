@@ -13,15 +13,15 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.acheprovas.R;
@@ -52,8 +52,41 @@ public class ListaProvasActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// Define a view da activity
+		// Define a view da activity e inicializa os componentes
 		this.setContentView(R.layout.lista_provas);
+		this.initComponents();
+
+		// Executa a busca da prova através de uma AsynkTask
+		new ListaProvasTask().execute();
+
+	}
+
+	/**
+	 * Infla as açoes da action bar desta view
+	 */
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.busca_activity_actions, menu);
+
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	/**
+	 * Sobrescrita de método
+	 */
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		// Despacha o progress bar
+		pd.dismiss();
+	}
+
+	/**
+	 * Inicializa e instancía os componentes gráficos da view
+	 */
+	protected void initComponents() {
 
 		// Inicializa e exibe o ProgressDialog
 		pd = new ProgressDialog(ListaProvasActivity.this);
@@ -62,19 +95,14 @@ public class ListaProvasActivity extends Activity {
 		pd.setCancelable(false);
 		pd.show();
 
-		// Executa a busca da prova através de uma AsynkTask
-		new ListaProvasTask().execute();
+		// Inicializa a listView
+		this.listView = (ListView) findViewById(R.id.listview);
+		
 
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		pd.dismiss();
 	}
 
 	/**
-	 * Método que invoca o Handler de busca
+	 * Invoca o Handler de busca
 	 */
 	public ArrayList<HashMap<String, String>> search() {
 
@@ -189,8 +217,7 @@ public class ListaProvasActivity extends Activity {
 
 		if (array != null) {
 
-			// Inicializa a listView e Liga ela ao seu ArrayAdapter
-			this.listView = (ListView) findViewById(R.id.listview);
+			// Liga a ListView ao seu ArrayAdapter
 			ArrayAdapterGenerico arrayAdapter = new ArrayAdapterGenerico(this,
 					R.layout.target_item, array);
 			listView.setAdapter(arrayAdapter);

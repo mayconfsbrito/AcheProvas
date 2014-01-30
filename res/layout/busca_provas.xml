@@ -12,6 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="160dp"
         android:ems="20"
+        android:textColor="@color/vermelho"
         android:inputType="text"
         android:singleLine="true">
         <requestFocus />
@@ -25,6 +26,6 @@
         android:layout_alignParentRight="true"
         android:layout_alignBottom="@id/etBuscar"
         android:enabled="false"
-        android:text="@string/search"/>
+        android:text="@string/buscar"/>
 
 </RelativeLayout>
