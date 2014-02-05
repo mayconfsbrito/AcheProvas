@@ -1,9 +1,13 @@
 package com.acheprovas.activitys;
 
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -28,6 +32,7 @@ import com.acheprovas.libs.Constants;
  * @author mayconfsbrito
  * @since 14/09/2013
  */
+@SuppressLint("NewApi")
 public class BuscaActivity extends Activity {
 
 	/**
@@ -65,7 +70,7 @@ public class BuscaActivity extends Activity {
 	 * Inicializa e instancía os componentes gráficos da view
 	 */
 	protected void initComponents() {
-
+		
 		// Instancía os componentes gráficos
 		this.setEtBuscar((EditText) findViewById(R.id.etBuscar));
 		this.setBtBuscar((Button) findViewById(R.id.btBuscar));
@@ -90,8 +95,6 @@ public class BuscaActivity extends Activity {
 						Intent it = new Intent(getBaseContext(),
 						ListaProvasActivity.class);
 						it.putExtra("strBusca", strBusca);
-						
-						
 						startActivityForResult(it, 0);
 						
 						
