@@ -4,4 +4,5 @@
     <color name="cinza_escuro">#cccccc</color>
     <color name="cinza_claro">#eeeeee</color>
     <color name="vermelho">#bd2d2b</color>
+    <color name="preto">#000000</color>
 </resources>

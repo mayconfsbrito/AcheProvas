@@ -11,14 +11,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -38,7 +35,8 @@ import com.acheprovas.util.task.DownloadTask;
  * @since 14/09/2013
  * 
  */
-public class ListaProvasActivity extends Activity {
+@SuppressLint("NewApi")
+public class ListaProvasActivity extends SuperActivityBusca {
 
 	protected static ProgressDialog pd;
 	protected ProgressDialog mProgressDialog;
@@ -62,17 +60,6 @@ public class ListaProvasActivity extends Activity {
 	}
 
 	/**
-	 * Infla as açoes da action bar desta view
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.busca_activity_actions, menu);
-
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	/**
 	 * Sobrescrita de método
 	 */
 	@Override
@@ -88,6 +75,9 @@ public class ListaProvasActivity extends Activity {
 	 */
 	protected void initComponents() {
 
+		//Insere na Action Bar o ícone para retornar a activity anterior
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		// Inicializa e exibe o ProgressDialog
 		pd = new ProgressDialog(ListaProvasActivity.this);
 		pd.setTitle("Bucando...");
@@ -97,7 +87,6 @@ public class ListaProvasActivity extends Activity {
 
 		// Inicializa a listView
 		this.listView = (ListView) findViewById(R.id.listview);
-		
 
 	}
 

@@ -23,6 +23,7 @@
             android:name="com.acheprovas.activitys.BuscaActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,12 +34,22 @@
         <activity
             android:name="com.acheprovas.activitys.ListaProvasActivity"
             android:label="@string/provas_enc"
+            android:parentActivityName="com.acheprovas.activitys.BuscaActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.acheprovas.activitys.BuscaActivity" />
         </activity>
         <activity
             android:name="com.acheprovas.activitys.ProvasActivity"
-            android:label="@string/provas_enc"
+            android:label="@string/provas_arm"
+            android:parentActivityName="com.acheprovas.activitys.BuscaActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.acheprovas.activitys.BuscaActivity" />
         </activity>
     </application>
 

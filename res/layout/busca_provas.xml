@@ -3,29 +3,43 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/white"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:paddingTop="10dp">
+
+    <ImageButton
+        android:id="@+id/ibBuscar"
+        android:layout_width="40dp"
+        android:layout_height="35dp"
+        android:layout_alignBottom="@+id/etBuscar"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="@color/cinza_escuro"
+        android:enabled="false"
+        android:src="@drawable/ic_action_search" />
 
     <EditText
         android:id="@+id/etBuscar"
-        android:layout_width="200dp"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="160dp"
-        android:ems="20"
-        android:textColor="@color/vermelho"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="149dp"
+        android:layout_toLeftOf="@+id/ibBuscar"
+        android:ems="10"
         android:inputType="text"
-        android:singleLine="true">
+        android:singleLine="true"
+        android:textColor="@color/vermelho">
+
         <requestFocus />
     </EditText>
 
-    <Button
-        android:id="@+id/btBuscar"
-        android:layout_width="80dp"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/etBuscar"
-        android:layout_alignParentRight="true"
-        android:layout_alignBottom="@id/etBuscar"
-        android:enabled="false"
-        android:text="@string/buscar"/>
+    <ImageView
+        android:id="@+id/ivLogo"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_above="@+id/ibBuscar"
+        android:layout_centerHorizontal="true"
+        android:clickable="false"
+        android:focusable="false"
+        android:src="@drawable/logo" />
 
 </RelativeLayout>

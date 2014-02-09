@@ -15,6 +15,7 @@
         <item name="android:windowBackground">@null</item>
         <item name="buttonBarStyle">?android:attr/buttonBarStyle</item>
         <item name="buttonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="android:textColor">@color/cinza_escuro</item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="android:Widget.Holo.ActionBar">

@@ -5,6 +5,7 @@
     <string name="buscar">Buscar</string>
     <string name="amazenadas">Armazenadas</string>
     <string name="provas_enc">Provas Encontradas</string>
+    <string name="provas_arm">Provas Armazenadas</string>
     <string name="busca_completa">Favor inserir a descrição para busca</string>
     <string name="buscando">Buscando ...</string>
     <string name="noInternet">Internet Indisponível</string>

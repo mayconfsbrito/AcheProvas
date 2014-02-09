@@ -1,29 +1,16 @@
 package com.acheprovas.activitys;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageButton;
 
 import com.acheprovas.R;
-import com.acheprovas.R.string;
-import com.acheprovas.libs.Constants;
 
 /**
  * Esta classe implementa a Activity da view "MainActivity", ou seja, a view de
@@ -32,14 +19,13 @@ import com.acheprovas.libs.Constants;
  * @author mayconfsbrito
  * @since 14/09/2013
  */
-@SuppressLint("NewApi")
-public class BuscaActivity extends Activity {
+public class BuscaActivity extends SuperActivityBusca {
 
 	/**
 	 * Variáveis da classe que representam componentes gráficos da view
 	 */
 	private EditText etBuscar;
-	private Button btBuscar;
+	private ImageButton ibBuscar;
 	private ProgressDialog pd;
 
 	/**
@@ -53,31 +39,18 @@ public class BuscaActivity extends Activity {
 		this.initComponents();
 
 	}
-	
-	/**
-	 * Infla as açoes da action bar desta view
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		
-		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.busca_activity_actions, menu);
-		
-		return super.onCreateOptionsMenu(menu);
-	}
 
 	/**
 	 * Inicializa e instancía os componentes gráficos da view
 	 */
 	protected void initComponents() {
-		
+
 		// Instancía os componentes gráficos
 		this.setEtBuscar((EditText) findViewById(R.id.etBuscar));
-		this.setBtBuscar((Button) findViewById(R.id.btBuscar));
-		
+		this.setIbBuscar((ImageButton) findViewById(R.id.ibBuscar));
 
 		// Declara o evento OnClick do botão
-		this.btBuscar.setOnClickListener(new OnClickListener() {
+		this.ibBuscar.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -89,81 +62,58 @@ public class BuscaActivity extends Activity {
 
 					// O texto para busca foi preenchido?
 					if (strBusca.length() > 0) {
-						
-						
-						// Cria uma nova intent com a string inserida e envia para a activity de resultado de busca
+
+						// Cria uma nova intent com a string inserida e envia
+						// para a activity de resultado de busca
 						Intent it = new Intent(getBaseContext(),
-						ListaProvasActivity.class);
+								ListaProvasActivity.class);
 						it.putExtra("strBusca", strBusca);
 						startActivityForResult(it, 0);
-						
-						
-						
-					} 
+
+					}
 				}
 
 			}
 		});
-		
-		//Declara o evento 
+
+		// Declara o evento
 		etBuscar.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-				
-				//O EditText foi preenchido com pelo menos um caracter?
-				if(etBuscar.getText().length() > 0){
-					
-					//Desbloqueia o botão de submissão
-					btBuscar.setEnabled(true);
-					
-					
-				} // O EditText está vazio
-				else{
-					// Bloqueia o botão de submissão
-					btBuscar.setEnabled(false);
-					
-				}
-				
-			}
-			
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
+			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
 					int arg3) {
-				// TODO Auto-generated method stub
-				
+
+				// O EditText foi preenchido com pelo menos um caracter?
+				if (etBuscar.getText().length() > 0) {
+
+					// Desbloqueia o botão de submissão
+					ibBuscar.setEnabled(true);
+					ibBuscar.setBackgroundResource(R.color.vermelho);
+
+				} // O EditText está vazio
+				else {
+					// Bloqueia o botão de submissão
+					ibBuscar.setEnabled(false);
+					ibBuscar.setBackgroundResource(R.color.cinza_escuro);
+
+				}
+
 			}
-			
+
+			@Override
+			public void beforeTextChanged(CharSequence arg0, int arg1,
+					int arg2, int arg3) {
+				// TODO Auto-generated method stub
+
+			}
+
 			@Override
 			public void afterTextChanged(Editable arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
 
-	}
-
-	/**
-	 * Verifica se o dispositivo está com internet disponível
-	 * 
-	 * @return true se existir conectividade ou false em caso negativo
-	 */
-	public boolean isNetworkAvailable() {
-
-		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-		NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-		// if no network is available networkInfo will be null
-		// otherwise check if we are connected
-		if (networkInfo != null && networkInfo.isConnected()) {
-			return true;
-		}
-
-		// Exibe uma mensagem ao usuário
-		Toast.makeText(getBaseContext(), string.noInternet,
-				Constants.TEMPO_TOAST).show();
-
-		return false;
 	}
 
 	/**
@@ -177,12 +127,12 @@ public class BuscaActivity extends Activity {
 		this.etBuscar = etBuscar;
 	}
 
-	public Button getBtBuscar() {
-		return btBuscar;
+	public ImageButton getIbBuscar() {
+		return ibBuscar;
 	}
 
-	public void setBtBuscar(Button btBuscar) {
-		this.btBuscar = btBuscar;
+	public void setIbBuscar(ImageButton btBuscar) {
+		this.ibBuscar = btBuscar;
 	}
 
 }
