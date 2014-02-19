@@ -63,6 +63,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 		OutputStream output = null;
 		HttpURLConnection connection = null;
 		String resultado = "";
+		File arquivo = null;
 
 		try {
 
@@ -92,7 +93,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			String enderecoArquivo = enderecoDiretorio + prova[0].getNome()
 					+ ".zip";
 			File diretorio = new File(enderecoDiretorio);
-			File arquivo = new File(diretorio, prova[0].getNome() + ".zip");
+			arquivo = new File(diretorio, prova[0].getNome() + ".zip");
 			diretorio.mkdirs(); // Cria o diretório para salvar o arquivo
 			Log.d(null, diretorio.getAbsolutePath());
 			output = new FileOutputStream(arquivo); // Endereço aonde o arquivo
@@ -105,7 +106,12 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			while ((count = input.read(data)) != -1) {
 				// Permite cancelamento com o botão voltar
 				if (isCancelled()) {
-					return null;
+					
+					//Deleta o arquivo gravado no disco
+					arquivo.delete();
+					
+					//Retorna a mensagem de cancelado
+					return "cancelled";
 				}
 				total += count;
 				// Publicando o progresso no ProgressBar
@@ -119,8 +125,16 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 		} catch (IOException e) {
 			e.printStackTrace();
 
+			//Deleta o arquivo gravado no disco
+			arquivo.delete();
+			return "Não foi possível gravar o arquivo no dispositivo!";
+
 		} catch (Exception e) {
 			e.printStackTrace();
+
+			//Deleta o arquivo gravado no disco
+			arquivo.delete();
+			return "Erro não identificado!";
 
 		} finally {
 			try {
@@ -172,11 +186,14 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	@Override
 	protected void onPostExecute(String result) {
 		mProgressDialog.dismiss();
+		Log.d(null, "Result=" + result);
 		if (result != null) {
 			Toast.makeText(context, "Download error: " + result,
 					Toast.LENGTH_LONG).show();
 
-			Log.e(null, "Download error: " + result);
+			if (result != "cancelled") {
+				Log.e(null, "Download error: " + result);
+			}
 
 		} else {
 			Toast.makeText(context, "Prova baixada com sucesso!",

@@ -22,7 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.acheprovas.R;
-import com.acheprovas.activitys.adapters.ArrayAdapterGenerico;
+import com.acheprovas.activitys.adapters.ArrayAdapterBusca;
 import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
 import com.acheprovas.util.json.JSONParser;
@@ -75,9 +75,9 @@ public class ListaProvasActivity extends SuperActivityBusca {
 	 */
 	protected void initComponents() {
 
-		//Insere na Action Bar o ícone para retornar a activity anterior
+		// Insere na Action Bar o ícone para retornar a activity anterior
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		// Inicializa e exibe o ProgressDialog
 		pd = new ProgressDialog(ListaProvasActivity.this);
 		pd.setTitle("Bucando...");
@@ -207,8 +207,8 @@ public class ListaProvasActivity extends SuperActivityBusca {
 		if (array != null) {
 
 			// Liga a ListView ao seu ArrayAdapter
-			ArrayAdapterGenerico arrayAdapter = new ArrayAdapterGenerico(this,
-					R.layout.target_item, array);
+			ArrayAdapterBusca arrayAdapter = new ArrayAdapterBusca(this,
+					R.layout.target_item_busca, array);
 			listView.setAdapter(arrayAdapter);
 
 			// Define o evento onClick de download para cada componente da lista
@@ -230,7 +230,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 					mProgressDialog.setIndeterminate(true);
 					mProgressDialog
 							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					mProgressDialog.setCancelable(false);
+					mProgressDialog.setCancelable(true);
 
 					// execute this when the downloader must be fired
 					final DownloadTask downloadTask = new DownloadTask(

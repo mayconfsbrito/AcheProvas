@@ -10,5 +10,9 @@
     <string name="buscando">Buscando ...</string>
     <string name="noInternet">Internet Indisponível</string>
     <string name="baixando">Baixando a prova </string>
+    <string name="noProvas">Não existem provas armazenadas neste dispositivo.</string>
+    <string name="sobre">Sobre...</string>
+    <string name="avalie">Gostou? Avalie-nos</string>
+    <string name="remover">Remover</string>
 
 </resources>
