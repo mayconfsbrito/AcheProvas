@@ -17,9 +17,9 @@ import android.os.PowerManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.acheprovas.R;
 import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
-import com.acheprovas.util.Decompress;
 
 /**
  * 
@@ -189,15 +189,16 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 		Log.d(null, "Result=" + result);
 		if (result != null) {
 			Toast.makeText(context, "Download error: " + result,
-					Toast.LENGTH_LONG).show();
+					Constants.TEMPO_TOAST).show();
 
 			if (result != "cancelled") {
-				Log.e(null, "Download error: " + result);
+				Toast.makeText(context, R.string.downCancel,
+						Constants.TEMPO_TOAST).show();
 			}
 
 		} else {
 			Toast.makeText(context, "Prova baixada com sucesso!",
-					Toast.LENGTH_SHORT).show();
+					Constants.TEMPO_TOAST).show();
 		}
 	}
 

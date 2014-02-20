@@ -14,5 +14,7 @@
     <string name="sobre">Sobre...</string>
     <string name="avalie">Gostou? Avalie-nos</string>
     <string name="remover">Remover</string>
+    <string name="remSuc">Prova removida com sucesso!</string>
+    <string name="downCancel">Donwload cancelado!</string>
 
 </resources>

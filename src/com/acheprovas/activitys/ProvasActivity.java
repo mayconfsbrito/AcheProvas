@@ -4,9 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -32,25 +30,101 @@ import com.acheprovas.libs.Constants;
 @SuppressLint({ "NewApi", "ShowToast" })
 public class ProvasActivity extends Activity {
 
-	protected static ProgressDialog pd;
 	protected Object mActionMode;
-	protected ListView listView;
-	ArrayList<String> list = new ArrayList<String>();
 	public int selectedItem = -1;
+	protected ListView listView;
+	ArrayList<String> listProvas = new ArrayList<String>();
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+	public void onCreate(Bundle icicle) {
+		super.onCreate(icicle);
+		setContentView(R.layout.provas_armazenadas);
 
-		// Define a view da activity
-		this.setContentView(R.layout.provas_armazenadas);
-
-		// Uicializa componentes
 		this.initComponents();
 
 		// Executa a busca da prova através de uma AsynkTask
 		new LerProvasArmazenadas(this).execute();
+	}
 
+	/**
+	 * Inicializa os componentes da Activity
+	 */
+	protected void initComponents() {
+
+		// Inicializa a listView
+		this.listView = (ListView) findViewById(R.id.listview);
+
+		// Inicializa o evento de pressionar algum item da listView
+		this.listView.setLongClickable(true);
+		this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> parent, View view,
+					int position, long id) {
+
+				if (mActionMode != null) {
+					return false;
+				}
+				selectedItem = position;
+
+				// start the CAB using the ActionMode.Callback defined above
+				mActionMode = ProvasActivity.this
+						.startActionMode(mActionModeCallback);
+				view.setSelected(true);
+				return true;
+			}
+		});
+
+	}
+
+	/**
+	 * Inicializa o Callback de ativação do ActionMode
+	 */
+	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
+
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+
+			MenuInflater inflater = mode.getMenuInflater();
+			inflater.inflate(R.menu.linha_selecionada, menu);
+			return true;
+		}
+
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return false;
+		}
+
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.action_remover:
+				deletar();
+				mode.finish();
+				return true;
+			default:
+				return false;
+			}
+		}
+
+		public void onDestroyActionMode(ActionMode mode) {
+			mActionMode = null;
+			selectedItem = -1;
+		}
+	};
+
+	private void deletar() {
+		
+		// Deleta o arquivo gravado no disco
+		String path = Environment.getExternalStorageDirectory()
+				+ Constants.DIRETORIO_PROVAS
+				+ listView.getItemAtPosition(selectedItem);
+		File arquivo = new File(path);
+		arquivo.delete();
+		
+		//
+		this.listProvas.remove(selectedItem);
+		ArrayAdapterProvas adapter = (ArrayAdapterProvas) this.listView.getAdapter();
+		adapter.notifyDataSetChanged();
+
+		Toast.makeText(ProvasActivity.this, R.string.remSuc, Constants.TEMPO_TOAST)
+				.show();
 	}
 
 	/**
@@ -64,8 +138,6 @@ public class ProvasActivity extends Activity {
 		inflater.inflate(R.menu.provas_activity_actions, menu);
 
 		// Configura a ActionBar
-		ActionBar actionBar = getActionBar();
-		// actionBar.setDisplayShowHomeEnabled(false);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return super.onCreateOptionsMenu(menu);
@@ -85,102 +157,6 @@ public class ProvasActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
-	/**
-	 * Inicializa e instancía os componentes gráficos da view
-	 */
-	protected void initComponents() {
-
-		// Insere na Action Bar o ícone para retornar a activity anterior
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-		// Inicializa e exibe o ProgressDialog
-		pd = new ProgressDialog(ProvasActivity.this);
-		pd.setTitle("Procurando Provas...");
-		pd.setMessage("Favor aguardar.");
-		pd.setCancelable(false);
-		pd.show();
-
-		// Inicializa a listView
-		this.listView = (ListView) findViewById(R.id.listview);
-
-		// Inicializa o evento de pressionar algum item da listView
-		this.listView.setLongClickable(true);
-		this.listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-			public boolean onItemLongClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				Log.d(null, "ListView Pressionado");
-
-				// O action mode está ativado no momento?
-				if (mActionMode != null) {
-					// Cancela o evento
-					return false;
-				}
-				selectedItem = position;
-
-				mActionMode = ProvasActivity.this
-						.startActionMode(mActionModeCallback);
-				view.setSelected(true);
-				return true;
-			}
-		});
-
-	}
-
-	/**
-	 * Implementa o ActionMode para esta Activity
-	 */
-	private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
-
-		@Override
-		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-
-			// Infla o recurso do menu a ser exibido
-			MenuInflater inflater = mode.getMenuInflater();
-	        inflater.inflate( R.menu.linha_selecionada, menu );
-	        
-			Log.d(null, "Menu Inflado");
-
-			return false;
-		}
-
-		@Override
-		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-			switch (item.getItemId()) {
-			case R.id.action_remover:
-				show();
-				// Fecha a Action quando executada
-				mode.finish();
-				break;
-
-			default:
-				break;
-			}
-
-			return false;
-		}
-
-		@Override
-		public void onDestroyActionMode(ActionMode mode) {
-			// Anula o ActionMode
-			mActionMode = null;
-			selectedItem = -1;
-
-		}
-
-		@Override
-		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-			return false;
-		}
-		
-		private void show() {
-		    Toast.makeText(ProvasActivity.this,
-		        "show", Constants.TEMPO_TOAST).show();
-		    Log.d(null, "show()");
-		  }
-
-	};
 
 	/**
 	 * Classe Interna que implementa a AsyncTask para listagem de provas
@@ -214,7 +190,7 @@ public class ProvasActivity extends Activity {
 				File f = new File(path);
 				File file[] = f.listFiles();
 				for (int i = 0; i < file.length; i++) {
-					list.add(file[i].getName());
+					listProvas.add(file[i].getName());
 				}
 
 			} catch (NullPointerException e) {
@@ -234,12 +210,7 @@ public class ProvasActivity extends Activity {
 		protected void onPostExecute(Integer result) {
 
 			// Imprime o resultado da busca nesta ListActivity
-			listItens(list);
-
-			// Remove o ProgressDialog caso ele esteja sendo exibido
-			if (pd != null && pd.isShowing()) {
-				pd.dismiss();
-			}
+			listItens(listProvas);
 
 			if (result == -1) {
 				Toast.makeText(this.context, R.string.noProvas,
