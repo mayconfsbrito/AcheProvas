@@ -37,12 +37,8 @@ public abstract class SuperActivityBusca extends Activity {
 		inflater.inflate(R.menu.busca_activity_actions, menu);
 
 		// Remove o ícone da action bar
-		ActionBar actionBar = getActionBar();
-//		actionBar.setDisplayShowHomeEnabled(false);
-//		menu.add(0, 0, 0, R.string.avalie)
-//        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-//		menu.add(0, 1, 0, R.string.sobre)
-//        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		    getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return super.onCreateOptionsMenu(menu);
 	}

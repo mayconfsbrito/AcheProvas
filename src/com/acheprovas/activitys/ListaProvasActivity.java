@@ -76,7 +76,8 @@ public class ListaProvasActivity extends SuperActivityBusca {
 	protected void initComponents() {
 
 		// Insere na Action Bar o ícone para retornar a activity anterior
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		    getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Inicializa e exibe o ProgressDialog
 		pd = new ProgressDialog(ListaProvasActivity.this);

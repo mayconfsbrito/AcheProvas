@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,6 +29,9 @@ import com.acheprovas.libs.Constants;
 @SuppressLint({ "NewApi", "ShowToast" })
 public class ProvasActivity extends Activity {
 
+	/**
+	 * Variáveis da classe
+	 */
 	protected Object mActionMode;
 	public int selectedItem = -1;
 	protected ListView listView;
@@ -39,6 +41,7 @@ public class ProvasActivity extends Activity {
 		super.onCreate(icicle);
 		setContentView(R.layout.provas_armazenadas);
 
+		//Inicializa os componentes da Activity
 		this.initComponents();
 
 		// Executa a busca da prova através de uma AsynkTask
@@ -138,7 +141,8 @@ public class ProvasActivity extends Activity {
 		inflater.inflate(R.menu.provas_activity_actions, menu);
 
 		// Configura a ActionBar
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (android.os.Build.VERSION.SDK_INT >= 11)
+		    getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return super.onCreateOptionsMenu(menu);
 	}
