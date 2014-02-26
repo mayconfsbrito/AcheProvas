@@ -6,34 +6,34 @@
     android:orientation="vertical"
     android:paddingTop="10dp" >
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:clickable="false"
-        android:focusable="false"
-        android:src="@drawable/logo" />
-
     <RelativeLayout
         android:id="@+id/frame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" 
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp">
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" 
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:clickable="false"
+            android:focusable="false"
+            android:src="@drawable/logo" />
 
         <EditText
             android:id="@+id/etBuscar"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/ibBuscar"
+            android:layout_below="@+id/ivLogo"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
             android:textColor="@color/vermelho" >
-
             <requestFocus />
         </EditText>
 
@@ -45,7 +45,7 @@
             android:layout_alignParentRight="true"
             android:background="@color/cinza_escuro"
             android:enabled="false"
-            android:src="@drawable/ic_action_search" />
+            android:src="@drawable/ic_action_search"/>
     </RelativeLayout>
 
 </RelativeLayout>

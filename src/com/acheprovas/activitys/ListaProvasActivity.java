@@ -27,6 +27,8 @@ import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
 import com.acheprovas.util.json.JSONParser;
 import com.acheprovas.util.task.DownloadTask;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 /**
  * Lista o resultado da busca efetuada pelo servidor
@@ -53,6 +55,10 @@ public class ListaProvasActivity extends SuperActivityBusca {
 		// Define a view da activity e inicializa os componentes
 		this.setContentView(R.layout.lista_provas);
 		this.initComponents();
+		
+		AdView adView = (AdView)findViewById(R.id.adView);
+	    AdRequest adRequest = new AdRequest.Builder().build();
+	    adView.loadAd(adRequest);
 
 		// Executa a busca da prova através de uma AsynkTask
 		new ListaProvasTask().execute();
