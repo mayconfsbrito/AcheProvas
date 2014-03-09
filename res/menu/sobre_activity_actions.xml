@@ -7,8 +7,10 @@
         android:showAsAction="ifRoom|withText"
         android:title="@string/buscar"/>
     <item
-        android:id="@+id/action_sobre" 
-        android:title="@string/sobre"
-        android:showAsAction="never"/>
+        android:id="@+id/action_collection"
+        android:icon="@drawable/ic_action_collection"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+        android:title="@string/amazenadas"/>
 
 </menu>

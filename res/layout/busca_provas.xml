@@ -30,6 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/ibBuscar"
             android:layout_below="@+id/ivLogo"
+            android:hint="@string/hintBusca"
+            android:textSize="13dp"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"

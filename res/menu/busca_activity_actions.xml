@@ -7,10 +7,9 @@
         android:orderInCategory="100"
         android:showAsAction="always"
         android:title="@string/amazenadas"/>
-    
-    <item android:title="@string/sobre"
-          android:showAsAction="never"/>
-    <item android:title="@string/avalie"
-          android:showAsAction="never" />
+    <item
+        android:id="@+id/action_sobre"
+        android:showAsAction="never"
+        android:title="@string/sobre"/>
 
 </menu>

@@ -156,8 +156,13 @@ public class ProvasActivity extends Activity {
 		case R.id.action_search:
 			// Finaliza a execução desta activity
 			finish();
-
-			return true;
+			break;
+			
+		case R.id.action_sobre:
+			 Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
+			 startActivityForResult(it1, 0);
+			break;
+		
 		}
 		return super.onOptionsItemSelected(item);
 	}

@@ -1,7 +1,6 @@
 package com.acheprovas.activitys;
 
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +26,7 @@ public abstract class SuperActivityBusca extends Activity {
 	protected abstract void initComponents();
 
 	/**
-	 * Infla as açoes da action bar desta view
+	 * Infla as actions da ActionBar
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -49,9 +48,12 @@ public abstract class SuperActivityBusca extends Activity {
 			// Chama a activity de provas armazenadas
 			Intent it = new Intent(getBaseContext(), ProvasActivity.class);
 			startActivityForResult(it, 0);
-			
+			break;
 
-			return true;
+		case R.id.action_sobre:
+			 Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
+			 startActivityForResult(it1, 0);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}

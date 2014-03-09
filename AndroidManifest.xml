@@ -46,6 +46,16 @@
                 android:value="com.acheprovas.activitys.BuscaActivity" />
         </activity>
         <activity
+            android:name="com.acheprovas.activitys.SobreActivity"
+            android:label="@string/tituloSobre"
+            android:parentActivityName="com.acheprovas.activitys.BuscaActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/FullscreenTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.acheprovas.activitys.BuscaActivity" />
+        </activity>
+        <activity
             android:name="com.acheprovas.activitys.ProvasActivity"
             android:label="@string/provas_arm"
             android:parentActivityName="com.acheprovas.activitys.BuscaActivity"

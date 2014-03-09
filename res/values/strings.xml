@@ -7,7 +7,7 @@
     <string name="provas_enc">Provas Encontradas</string>
     <string name="provas_arm">Provas Armazenadas</string>
     <string name="busca_completa">Favor inserir a descrição para busca</string>
-    <string name="buscando">Buscando ...</string>
+    <string name="buscando">Buscando...</string>
     <string name="noInternet">Internet Indisponível</string>
     <string name="baixando">Baixando a prova </string>
     <string name="noProvas">Não existem provas armazenadas neste dispositivo.</string>
@@ -17,6 +17,7 @@
     <string name="remSuc">Prova removida com sucesso!</string>
     <string name="downCancel">Donwload cancelado!</string>
     <string name="downConcl">Download concluído</string>
-        
+	<string name="tituloSobre">Sobre o AcheProvas</string>
+	<string name="hintBusca">Ex: ENEM 2013, UFMG Segunda Etapa...</string>
 
 </resources>
