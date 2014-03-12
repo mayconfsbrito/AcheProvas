@@ -131,7 +131,6 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 					
 					//Deleta o arquivo gravado no disco
 					arquivo.delete();
-					notificacaoDownload(false, "cancelled");
 					
 					return "cancelled";
 				}
@@ -213,19 +212,14 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	protected void onPostExecute(String result) {
 		mProgressDialog.dismiss();
 
-		//O download foi cancelado ou abortado?
+		//O download foi abortado?
 		if (result != null) {
 			
-			//Informa o cancelamento do download
+			//Informa a abortagem do download
 			notificacaoDownload(false, result);
 			Toast.makeText(context, "Download error: " + result,
 					Constants.TEMPO_TOAST).show();
 
-			if (result != "cancelled") {
-				Toast.makeText(context, R.string.downCancel,
-						Constants.TEMPO_TOAST).show();
-			}
-			
 			//O download foi concluído com sucesso
 		} else {
 			
@@ -235,6 +229,19 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 					Constants.TEMPO_TOAST).show();
 		}
 		
+	}
+	
+	/**
+	 * Caso o download seja cancelado executa o seguinte método sobrescrito
+	 */
+	@Override
+	protected void onCancelled(String result) {
+		super.onCancelled(result);
+		
+		//Notifica o cancelamento do download
+		notificacaoDownload(false, result);
+		Toast.makeText(context, R.string.downCancel,
+				Constants.TEMPO_TOAST).show();
 	}
 	
 	/**

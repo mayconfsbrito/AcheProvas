@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.acheprovas.R;
 import com.acheprovas.activitys.adapters.ArrayAdapterBusca;
@@ -100,7 +101,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 	/**
 	 * Invoca o Handler de busca
 	 */
-	public ArrayList<HashMap<String, String>> search() {
+	public ArrayList<HashMap<String, String>> buscar() {
 
 		// Instancia na string o termo da busca
 		String strBusca = getIntent().getExtras().getString("strBusca");
@@ -130,7 +131,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 			// Foi encontrado algum resultado de objeto JSON?
 			if (json != null) {
 
-				// Inicializaa o ArrayList que conterá as provas
+				// Inicializa o ArrayList que conterá as provas
 				listProvas = new ArrayList<HashMap<String, String>>();
 
 				// Captura o array de nomes
@@ -182,7 +183,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 		protected Void doInBackground(Void... params) {
 
 			// Busca na API online do ache provas o resultado do termo de busca
-			array = search();
+			array = buscar();
 
 			return null;
 		}
@@ -256,6 +257,10 @@ public class ListaProvasActivity extends SuperActivityBusca {
 
 			});
 
+		} else {
+			Toast.makeText(this, R.string.buscaVazia,
+					Constants.TEMPO_TOAST).show();
+			finish();
 		}
 
 	}
