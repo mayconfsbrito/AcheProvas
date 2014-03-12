@@ -11,7 +11,7 @@
     <string name="noInternet">Internet Indisponível</string>
     <string name="baixando">Baixando a prova </string>
     <string name="noProvas">Não existem provas armazenadas neste dispositivo.</string>
-    <string name="sobre">Sobre...</string>
+    <string name="sobre">Sobre</string>
     <string name="avalie">Gostou? Avalie-nos</string>
     <string name="remover">Remover</string>
     <string name="remSuc">Prova removida com sucesso!</string>
@@ -20,5 +20,6 @@
 	<string name="tituloSobre">Sobre o AcheProvas</string>
 	<string name="hintBusca">Ex: ENEM 2013, UFMG Segunda Etapa...</string>
 	<string name="buscaVazia">Não foram encontradas provas para esta busca!</string>
+	<string name="sair">Sair</string>
 
 </resources>
