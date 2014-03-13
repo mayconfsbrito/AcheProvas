@@ -12,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import com.acheprovas.libs.Constants;
 import com.acheprovas.util.json.JSONParser;

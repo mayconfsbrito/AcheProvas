@@ -14,6 +14,8 @@ import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -102,8 +104,6 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			input = connection.getInputStream();
 			String enderecoDiretorio = Environment
 					.getExternalStorageDirectory() + Constants.DIRETORIO_PROVAS;
-			String enderecoArquivo = enderecoDiretorio + prova[0].getNome()
-					+ ".zip";
 			File diretorio = new File(enderecoDiretorio);
 			arquivo = new File(diretorio, prova[0].getNome() + ".zip");
 			diretorio.mkdirs(); // Cria o diretório para salvar o arquivo
@@ -146,6 +146,18 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 				}
 				output.write(data, 0, count);
 			}
+			
+			//Faz uma requisição ao servidor para informar a conclusão do download
+			//para efeitos estatísticos do servidor
+			String urlCount = "http://api.acheprovas.com/counter.php?id_prova=" + prova[0].getId() + "&origem=3";
+			url = new URL(urlCount);
+			connection = (HttpURLConnection) url.openConnection();
+			connection.setRequestMethod("GET");
+			connection.setDoOutput(true);
+			connection.connect();
+			connection.getResponseCode();
+			Log.d(null, urlCount);
+			
 
 		} catch (IOException e) {
 			e.printStackTrace();
