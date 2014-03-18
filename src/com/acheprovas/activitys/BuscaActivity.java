@@ -127,8 +127,8 @@ public class BuscaActivity extends SuperActivityBusca {
 		
 		//Exibe um AlertDialog solicitando ao usuario para avaliar a app
 		new AlertDialog.Builder(this)
-		.setTitle("Avalie-nos")
-        .setMessage("Precisamos de você para avaliar a nossa nota no Google Marketing.")
+		.setTitle("Vai não... É cedo uai!")
+        .setMessage("Antes de partir, deixe sua avaliação para nosso aplicativo!\n\nÉ 1 minutinho!\n\n;)")
         .setCancelable(true)
         .setPositiveButton("Quero avaliar!",
                 new DialogInterface.OnClickListener() {

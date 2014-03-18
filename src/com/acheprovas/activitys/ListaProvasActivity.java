@@ -88,7 +88,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 
 		// Inicializa e exibe o ProgressDialog
 		pd = new ProgressDialog(ListaProvasActivity.this);
-		pd.setTitle("Bucando...");
+		pd.setTitle("Buscando...");
 		pd.setMessage("Favor aguardar.");
 		pd.setCancelable(false);
 		pd.show();

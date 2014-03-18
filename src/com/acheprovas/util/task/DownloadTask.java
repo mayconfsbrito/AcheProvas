@@ -14,8 +14,8 @@ import android.annotation.SuppressLint;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -41,7 +41,6 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 * Variáveis da classe
 	 */
 	private Context context;
-	private String resultado;
 	protected ProgressDialog mProgressDialog;
 	private NotificationManager mNotifyManager;
 	private Builder mBuilder;
@@ -202,6 +201,16 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	protected void onPreExecute() {
 		super.onPreExecute();
 		mProgressDialog.show();
+		
+		mProgressDialog.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				Log.d(null, "OnCancel");
+				
+			}
+					
+		});
 	}
 
 	/**

@@ -2,11 +2,17 @@ package com.acheprovas.activitys;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -41,7 +47,7 @@ public class ProvasActivity extends Activity {
 		super.onCreate(icicle);
 		setContentView(R.layout.provas_armazenadas);
 
-		//Inicializa os componentes da Activity
+		// Inicializa os componentes da Activity
 		this.initComponents();
 
 		// Executa a busca da prova através de uma AsynkTask
@@ -113,21 +119,22 @@ public class ProvasActivity extends Activity {
 	};
 
 	private void deletar() {
-		
+
 		// Deleta o arquivo gravado no disco
 		String path = Environment.getExternalStorageDirectory()
 				+ Constants.DIRETORIO_PROVAS
 				+ listView.getItemAtPosition(selectedItem);
 		File arquivo = new File(path);
 		arquivo.delete();
-		
+
 		//
 		this.listProvas.remove(selectedItem);
-		ArrayAdapterProvas adapter = (ArrayAdapterProvas) this.listView.getAdapter();
+		ArrayAdapterProvas adapter = (ArrayAdapterProvas) this.listView
+				.getAdapter();
 		adapter.notifyDataSetChanged();
 
-		Toast.makeText(ProvasActivity.this, R.string.remSuc, Constants.TEMPO_TOAST)
-				.show();
+		Toast.makeText(ProvasActivity.this, R.string.remSuc,
+				Constants.TEMPO_TOAST).show();
 	}
 
 	/**
@@ -142,7 +149,7 @@ public class ProvasActivity extends Activity {
 
 		// Configura a ActionBar
 		if (android.os.Build.VERSION.SDK_INT >= 11)
-		    getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -157,12 +164,12 @@ public class ProvasActivity extends Activity {
 			// Finaliza a execução desta activity
 			finish();
 			break;
-			
+
 		case R.id.action_sobre:
-			 Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
-			 startActivityForResult(it1, 0);
+			Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
+			startActivityForResult(it1, 0);
 			break;
-		
+
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -250,15 +257,88 @@ public class ProvasActivity extends Activity {
 						int position, long id) {
 
 					try {
+
+						// Inicializa a variável com o caminho do arquivo
+						// selecionado
 						String path = Environment.getExternalStorageDirectory()
 								+ Constants.DIRETORIO_PROVAS
 								+ list.get(position);
 
+						// Inicializa a intent alvo a executar a abertura do
+						// arquivo
 						File file = new File(path);
-						Intent it = new Intent();
-						it.setAction(android.content.Intent.ACTION_VIEW);
-						it.setDataAndType(Uri.fromFile(file), "application/zip");
-						startActivity(it);
+						Intent target = new Intent(Intent.ACTION_VIEW);
+						target.setDataAndType(Uri.fromFile(file),
+								"application/zip");
+						target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+						// Exibe uma opção de escolha para abrir o arquivo pdf
+						// selecionado
+						// Check if Intent available
+						List<ResolveInfo> list = getPackageManager()
+								.queryIntentActivities(target,
+										PackageManager.MATCH_DEFAULT_ONLY);
+						if (list.size() > 0) {
+							Intent intent = Intent.createChooser(target,
+									"Abrir arquivo PDF");
+							// Abre a prova pdf
+							startActivity(intent);
+						} else {
+
+							// Exibe uma instrução caso não exista nenhum
+							// programa para leitura de pdf
+							// Exibe um AlertDialog solicitando ao usuario para
+							// avaliar a app
+							new AlertDialog.Builder(view.getContext())
+									.setTitle("Atenção!")
+									.setMessage(
+											"Este dispositivo não tem nenhum aplicativo leitor de arquivos ZIP instalado.\n\n"
+													+ "Nós recomendamos o File Commander, sem ele ou qualquer outro leitor de arquivos ZIP não é possível visualizar as nossas provas.\n\n"
+													+ "Deseja instalar o File Comamnder? Leva só um minutinho ;)")
+									.setCancelable(true)
+									.setPositiveButton(
+											"Sim, quero instalar!",
+											new DialogInterface.OnClickListener() {
+												public void onClick(
+														DialogInterface dialog,
+														int id) {
+
+													// Abre o Google Play
+													// direcionado para a página
+													// do Adobe Reader PDF
+													Intent marketIntent = new Intent(
+															Intent.ACTION_VIEW);
+
+													marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+													marketIntent.setData(Uri
+															.parse("market://details?id=com.mobisystems.fileman&hl=pt_BR"));
+													
+													try {
+														//Abre o Google Market na conta do Adobe Reader
+														startActivity(marketIntent);
+														
+														//Trata exceção caso não seja possível abrir o Google Market
+													} catch(ActivityNotFoundException ex){
+														ex.printStackTrace();
+														
+														//Exibe um Dialog avisando que não é possível abrir o Market
+														//E notifica o usuário dos possíveis motivos
+														new AlertDialog.Builder(ProvasActivity.this)
+														.setTitle("Atenção!")
+														.setMessage(
+																"Você não tem uma conta do Google cadastrada neste dispositivo ou o Google Play (Market) não está instalado.\n\n" +
+																"Cadastre sua conta do Google e instale um aplicativo de leitura ZIP e PDF, utilizando o Google Play, antes de abrir uma de nossas provas.")
+														.setCancelable(true)
+														.setPositiveButton("Obrigado!", null)
+														.show();
+													}
+
+												}
+											})
+									.setNegativeButton("Não, obrigado.", null)
+									.show();
+
+						}
 
 					} catch (Exception e) {
 						e.printStackTrace();
