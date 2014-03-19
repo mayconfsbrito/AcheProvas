@@ -43,16 +43,26 @@ public abstract class SuperActivityBusca extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
+		// Verifica o menu item selecionado
 		switch (item.getItemId()) {
+
+		// Caso foi selecionado 'Buscar'
 		case R.id.action_collection:
 			// Chama a activity de provas armazenadas
 			Intent it = new Intent(getBaseContext(), ProvasActivity.class);
 			startActivityForResult(it, 0);
 			break;
 
+		// Caso foi selecionado 'Sobre'
 		case R.id.action_sobre:
-			 Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
-			 startActivityForResult(it1, 0);
+			Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
+			startActivityForResult(it1, 0);
+			break;
+
+		// Caso foi pressionado para Retornar
+		case android.R.id.home:
+			finish();
 			break;
 		}
 		return super.onOptionsItemSelected(item);

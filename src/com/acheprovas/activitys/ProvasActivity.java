@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -137,6 +138,11 @@ public class ProvasActivity extends Activity {
 				Constants.TEMPO_TOAST).show();
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+	}
+
 	/**
 	 * Infla as açoes da action bar desta view
 	 */
@@ -159,15 +165,25 @@ public class ProvasActivity extends Activity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+
+		// Verifica o menu item selecionado
 		switch (item.getItemId()) {
+
+		// Caso foi selecionado 'Buscar'
 		case R.id.action_search:
 			// Finaliza a execução desta activity
 			finish();
 			break;
 
+		// Caso foi selecionado 'Sobre'
 		case R.id.action_sobre:
 			Intent it1 = new Intent(getBaseContext(), SobreActivity.class);
 			startActivityForResult(it1, 0);
+			break;
+
+		// Caso foi pressionado para Retornar
+		case android.R.id.home:
+			finish();
 			break;
 
 		}
@@ -309,28 +325,42 @@ public class ProvasActivity extends Activity {
 													Intent marketIntent = new Intent(
 															Intent.ACTION_VIEW);
 
-													marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+													marketIntent
+															.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 													marketIntent.setData(Uri
 															.parse("market://details?id=com.mobisystems.fileman&hl=pt_BR"));
-													
+
 													try {
-														//Abre o Google Market na conta do Adobe Reader
+														// Abre o Google Market
+														// na conta do Adobe
+														// Reader
 														startActivity(marketIntent);
-														
-														//Trata exceção caso não seja possível abrir o Google Market
-													} catch(ActivityNotFoundException ex){
+
+														// Trata exceção caso
+														// não seja possível
+														// abrir o Google Market
+													} catch (ActivityNotFoundException ex) {
 														ex.printStackTrace();
-														
-														//Exibe um Dialog avisando que não é possível abrir o Market
-														//E notifica o usuário dos possíveis motivos
-														new AlertDialog.Builder(ProvasActivity.this)
-														.setTitle("Atenção!")
-														.setMessage(
-																"Você não tem uma conta do Google cadastrada neste dispositivo ou o Google Play (Market) não está instalado.\n\n" +
-																"Cadastre sua conta do Google e instale um aplicativo de leitura ZIP e PDF, utilizando o Google Play, antes de abrir uma de nossas provas.")
-														.setCancelable(true)
-														.setPositiveButton("Obrigado!", null)
-														.show();
+
+														// Exibe um Dialog
+														// avisando que não é
+														// possível abrir o
+														// Market
+														// E notifica o usuário
+														// dos possíveis motivos
+														new AlertDialog.Builder(
+																ProvasActivity.this)
+																.setTitle(
+																		"Atenção!")
+																.setMessage(
+																		"Você não tem uma conta do Google cadastrada neste dispositivo ou o Google Play (Market) não está instalado.\n\n"
+																				+ "Cadastre sua conta do Google e instale um aplicativo de leitura ZIP e PDF, utilizando o Google Play, antes de abrir uma de nossas provas.")
+																.setCancelable(
+																		true)
+																.setPositiveButton(
+																		"Obrigado!",
+																		null)
+																.show();
 													}
 
 												}

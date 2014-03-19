@@ -16,6 +16,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.PowerManager;
@@ -82,6 +83,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 			// Inicializa a conexão para download da prova
 			String urlProva = prova[0].getLink().replaceAll(" ", "%20");
+			urlProva = Uri.parse(urlProva).toString();
 			Log.d(null, "Baixando a prova: " + urlProva);
 			URL url = new URL(urlProva);
 			connection = (HttpURLConnection) url.openConnection();
