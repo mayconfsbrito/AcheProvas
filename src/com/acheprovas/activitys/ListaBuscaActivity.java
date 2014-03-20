@@ -39,7 +39,7 @@ import com.google.android.gms.ads.AdView;
  * 
  */
 @SuppressLint("NewApi")
-public class ListaProvasActivity extends SuperActivityBusca {
+public class ListaBuscaActivity extends SuperActivityBusca {
 
 	protected static ProgressDialog pd;
 	protected ProgressDialog mProgressDialog;
@@ -87,7 +87,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 		    getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		// Inicializa e exibe o ProgressDialog
-		pd = new ProgressDialog(ListaProvasActivity.this);
+		pd = new ProgressDialog(ListaBuscaActivity.this);
 		pd.setTitle("Buscando...");
 		pd.setMessage("Favor aguardar.");
 		pd.setCancelable(false);
@@ -233,7 +233,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 					Prova prova = new Prova(map);
 
 					mProgressDialog = new ProgressDialog(
-							ListaProvasActivity.this);
+							ListaBuscaActivity.this);
 					mProgressDialog.setMessage("Baixando a prova");
 					mProgressDialog.setIndeterminate(true);
 					mProgressDialog
@@ -242,7 +242,7 @@ public class ListaProvasActivity extends SuperActivityBusca {
 
 					// execute this when the downloader must be fired
 					final DownloadTask downloadTask = new DownloadTask(
-							ListaProvasActivity.this, mProgressDialog);
+							ListaBuscaActivity.this, mProgressDialog);
 					downloadTask.execute(prova);
 
 					mProgressDialog

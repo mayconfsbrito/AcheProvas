@@ -36,7 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.acheprovas.activitys.ListaProvasActivity"
+            android:name="com.acheprovas.activitys.ListaBuscaActivity"
             android:label="@string/provas_enc"
             android:parentActivityName="com.acheprovas.activitys.BuscaActivity"
             android:screenOrientation="portrait"

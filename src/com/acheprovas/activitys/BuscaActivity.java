@@ -70,7 +70,7 @@ public class BuscaActivity extends SuperActivityBusca {
 						// Cria uma nova intent com a string inserida e envia
 						// para a activity de resultado de busca
 						Intent it = new Intent(getBaseContext(),
-								ListaProvasActivity.class);
+								ListaBuscaActivity.class);
 						it.putExtra("strBusca", strBusca);
 						startActivityForResult(it, 0);
 
