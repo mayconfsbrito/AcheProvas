@@ -29,12 +29,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/ibBuscar"
-            android:layout_below="@+id/ivLogo"
+            android:layout_below="@+id/tvDigite"
             android:hint="@string/hintBusca"
-            android:textSize="13dp"
+            android:textSize="16sp"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
+            android:textCursorDrawable="@null"
             android:textColor="@color/vermelho" >
             <requestFocus />
         </EditText>
@@ -48,6 +49,32 @@
             android:background="@color/cinza_escuro"
             android:enabled="false"
             android:src="@drawable/ic_action_search"/>
+        
+        <TextView
+            android:id="@+id/tvDigite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivLogo"
+            android:gravity="left"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/digite"
+            android:textColor="@color/vermelho"
+            android:textSize="18sp" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="5dp"
+        android:text="@string/titulo"
+        android:textColor="@color/vermelho"
+        android:textSize="18sp" />
 
 </RelativeLayout>
