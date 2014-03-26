@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:dividerHeight="4px"/>
+        android:divider="@color/cinza_escuro"
+        android:dividerHeight="1px"/>
 
 </RelativeLayout>

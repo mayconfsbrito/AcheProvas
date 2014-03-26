@@ -253,7 +253,16 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 									int which) {
 								mProgressDialog.show();
 							}
-						}).show();
+						})
+						.setOnCancelListener(new OnCancelListener() {
+							
+							@Override
+							public void onCancel(DialogInterface dialog) {
+								isCancelled = true;
+								
+							}
+						})
+						.show();
 
 	}
 

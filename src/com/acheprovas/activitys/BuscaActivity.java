@@ -2,19 +2,21 @@ package com.acheprovas.activitys;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
 import com.acheprovas.R;
+import com.acheprovas.persistencia.dao.AbstractDAO;
 
 /**
  * Esta classe implementa a Activity da view "MainActivity", ou seja, a view de
@@ -31,6 +33,7 @@ public class BuscaActivity extends SuperActivityBusca {
 	private EditText etBuscar;
 	private ImageButton ibBuscar;
 	private ProgressDialog pd;
+	private static int contExecucoes = 0;
 
 	/**
 	 * Implementa as ações a serem executadas assim que a activity é criada
@@ -119,39 +122,107 @@ public class BuscaActivity extends SuperActivityBusca {
 		});
 
 	}
+
 	/**
 	 * Método executado quando o botão para voltar for pressionado
 	 */
 	@Override
 	public void onBackPressed() {
-		
-		//Exibe um AlertDialog solicitando ao usuario para avaliar a app
-		new AlertDialog.Builder(this)
-		.setTitle("Vai não... É cedo uai!")
-        .setMessage("Antes de partir, deixe sua avaliação para nosso aplicativo!\n\nÉ 1 minutinho!\n\n;)")
-        .setCancelable(true)
-        .setPositiveButton("Quero avaliar!",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                            int id) {
-                    	startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://acheprovas.com/avalie")));
 
-                    }
-                }).setNegativeButton("Não, obrigado.", new DialogInterface.OnClickListener() {
+		// Inicializa variáveis
+		int id = 0;
+		
+		int validacao = 0;
 
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // TODO Auto-generated method stub
-                        finish();
-                    }
-                }).show();
+		// Consulta as informações de validação da app
+		Cursor cursor = this.consultaValidacao();
+		if (cursor != null && !cursor.isAfterLast()) {
+			id = Integer.parseInt(cursor.getString(0));
+			contExecucoes = Integer.parseInt(cursor.getString(1));
+			validacao = Integer.parseInt(cursor.getString(2));
+
+		}
 		
-		
-		//Executa o método pai para retornar
-//		super.onBackPressed();
-		
+		// O usuário ainda não avaliou a app? A contagem de execucoes é divisível por 5?
+		if (validacao == 0 && (contExecucoes % 3 == 0)) {
+
+			// Exibe um AlertDialog solicitando ao usuario para avaliar a app
+			new AlertDialog.Builder(this)
+					.setTitle("Vai não... É cedo uai!")
+					.setMessage(
+							"Antes de partir, deixe sua avaliação para nosso aplicativo!\n\nÉ 1 minutinho!\n\n;)")
+					.setCancelable(true)
+					.setNegativeButton("Quero avaliar!",
+							new DialogInterface.OnClickListener() {
+								public void onClick(DialogInterface dialog,
+										int id) {
+
+									// Inicializa a activity para avaliação
+									startActivity(new Intent(
+											Intent.ACTION_VIEW,
+											Uri.parse("http://acheprovas.com/avalie")));
+
+									// Insere no bd a informação de que o
+									// aplicativo foi validado
+									AbstractDAO dao = new AbstractDAO(
+											BuscaActivity.this);
+									ContentValues cv = new ContentValues();
+									cv.put("validacao", 1);
+									dao.alterar("informacoes",
+											cv, "id=1", null);
+
+								}
+							})
+					.setPositiveButton("Lembre-me mais tarde.",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									
+									//Conta a execução
+									contaExecucao();
+									
+									// Finaliza a activity
+									finish();
+								}
+							}).show();
+		} // Contabiliza a execução do aplicativo 
+		else {
+			
+			//Conta a execução
+			contaExecucao();
+			
+			// Finaliza a activity
+			finish();
+		}
+
 	}
 	
+	/**
+	 * Consulta o bd para saber as informações de execução da apk
+	 * @return
+	 */
+	public Cursor consultaValidacao(){
+		AbstractDAO dao = new AbstractDAO(BuscaActivity.this);
+		Cursor cursor = dao.consultar("informacoes", null, "id=1", null);
+		
+		return cursor;
+	}
+	
+	/**
+	 * Armazena no bd mais uma execução da apk
+	 */
+	public void contaExecucao(){
+		// Insere no bd a informação de que o
+		// aplicativo foi executado
+		AbstractDAO dao = new AbstractDAO(
+				BuscaActivity.this);
+		ContentValues cv = new ContentValues();
+		cv.put("contExecucoes", ++contExecucoes);
+		dao.alterar("informacoes",
+				cv, "id=1", null);
+	}
 
 	/**
 	 * Métodos Getters e Setters da Classe

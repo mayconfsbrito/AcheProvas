@@ -29,14 +29,14 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/ibBuscar"
-            android:layout_below="@+id/tvDigite"
+            android:layout_below="@+id/ivLogo"
             android:hint="@string/hintBusca"
-            android:textSize="16sp"
+            android:textSize="17sp"
             android:ems="10"
             android:inputType="text"
             android:singleLine="true"
             android:textCursorDrawable="@null"
-            android:textColor="@color/vermelho" >
+            android:textColor="@color/preto" >
             <requestFocus />
         </EditText>
 
@@ -50,6 +50,7 @@
             android:enabled="false"
             android:src="@drawable/ic_action_search"/>
         
+        <!-- 
         <TextView
             android:id="@+id/tvDigite"
             android:layout_width="wrap_content"
@@ -61,6 +62,7 @@
             android:text="@string/digite"
             android:textColor="@color/vermelho"
             android:textSize="18sp" />
+             -->
     </RelativeLayout>
 
     <TextView

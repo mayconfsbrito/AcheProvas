@@ -20,7 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/adView"
-        android:background="@color/white" />
+        android:background="@color/white"
+        android:divider="@color/cinza_escuro"
+        android:dividerHeight="1px" />
 
 </RelativeLayout>
 <!--

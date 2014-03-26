@@ -21,7 +21,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Cria o banco de dados no momento em que a apk √© instalada
+	 * Cria o banco de dados no momento em que a apk È instalada
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
@@ -33,7 +33,8 @@ public class DBHelper extends SQLiteOpenHelper {
 			
 			//Cria a tupla com propriedades padrıes da tabela CONFIGURACAO
 			ContentValues values = new ContentValues();
-			values.put("contExecucoes", 1);
+			values.put("id", 1);
+			values.put("contExecucoes", 0);
 			values.put("validacao", 0);
 			db.insert("informacoes", null, values);
 			
@@ -46,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
 	}
 
 	/**
-	 * Atualiza o banco de dados para novas vers√µes
+	 * Atualiza o banco de dados para novas versıes
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
