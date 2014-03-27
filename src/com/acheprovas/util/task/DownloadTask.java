@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -13,12 +12,15 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnDismissListener;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -29,6 +31,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.acheprovas.R;
+import com.acheprovas.activitys.ListaBuscaActivity;
+import com.acheprovas.activitys.ProvasActivity;
 import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
 
@@ -62,13 +66,15 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 * Método de execução da thread. Realiza de forma independete o download de
 	 * uma determinada prova.
 	 * 
-	 * Artigo Referência:
-	 * http://stackoverflow.com/questions/3028306/download-a-file
-	 * -with-android-and-showing-the-progress-in-a-progressdialog
 	 */
 	@SuppressWarnings("resource")
 	@Override
 	protected String doInBackground(Prova... prova) {
+
+		// Verifica se já existe a prova e aborta a execução em caso positivo
+		if (jaExisteProva(prova)) {
+			return "existe";
+		}
 
 		// Previne que a CPU seja desligada caso o usuário pressione o botão de
 		// desligar durante o download
@@ -116,6 +122,11 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			output = new FileOutputStream(arquivo); // Endereço aonde o arquivo
 													// da prova será gravado
 
+			// Prepara um trigger caso a notificação seja selecionada
+			Intent it = new Intent(context, ListaBuscaActivity.class);
+			it.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+			PendingIntent pend = PendingIntent.getActivity(context, 0, it, 0);
+
 			// Inicializa o notificador da barra superior fixa do android
 			Integer id = new Random().nextInt();
 			listIdNotf.add(id);
@@ -124,6 +135,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			mBuilder = new NotificationCompat.Builder(context);
 			mBuilder.setContentTitle("Baixando Prova")
 					.setContentText("Download em Progresso")
+					.setContentIntent(pend)
 					.setSmallIcon(R.drawable.ic_action_download);
 			mNotifyManager.notify(id, mBuilder.build());
 
@@ -253,16 +265,43 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 									int which) {
 								mProgressDialog.show();
 							}
-						})
-						.setOnCancelListener(new OnCancelListener() {
-							
-							@Override
-							public void onCancel(DialogInterface dialog) {
-								isCancelled = true;
-								
-							}
-						})
-						.show();
+						}).setOnCancelListener(new OnCancelListener() {
+
+					@Override
+					public void onCancel(DialogInterface dialog) {
+						isCancelled = true;
+
+					}
+				}).show();
+
+	}
+
+	/**
+	 * Percorre o diretório de provas, procura se já existe uma prova com o
+	 * mesmo nome da prova a ser baixada. Aborta o download caso já exista uma
+	 * prova com o mesmo nome.
+	 * 
+	 * @param prova
+	 * @return
+	 */
+	private boolean jaExisteProva(Prova... prova) {
+
+		String path = Environment.getExternalStorageDirectory()
+				+ Constants.DIRETORIO_PROVAS;
+		File f = new File(path);
+		File file[] = f.listFiles();
+		Log.d(null, "");
+
+		for (int i = 0; i < file.length; i++) {
+			if (prova[0].getNome().equals(
+					((String) file[i].getName()).replaceAll(".zip", ""))) {
+
+				return true;
+			}
+
+		}
+
+		return false;
 
 	}
 
@@ -281,8 +320,8 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
-		this.publicarFim(result);
 
+		this.publicarFim(result);
 	}
 
 	/**
@@ -309,27 +348,39 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 		if (mBuilder != null && mNotifyManager != null) {
 
+			// Prepara um trigger caso a notificação seja selecionada
+			Intent it = new Intent(context, ProvasActivity.class);
+			PendingIntent pend = PendingIntent.getActivity(context, 0, it, 0);
+
 			// O download foi concluído?
 			if (!this.isCancelled) {
+
+				// Notifica a partir da barra superior do Android
 				mBuilder.setContentTitle("Download Concluído")
 						.setContentText(
 								"Download da prova concluído com sucesso")
+						.setAutoCancel(true).setContentIntent(pend)
 						.setProgress(0, 0, false);
 				mNotifyManager.notify(listIdNotf.get(0), mBuilder.build());
+
+				// Notifica a partir do toast
 				Toast.makeText(context, R.string.downConcl,
 						Constants.TEMPO_TOAST).show();
 
-				// O Download não foi concluído?
-			} else {
-
+			}// O Download não foi concluído?
+			else {
+				// Notifica a partir da barra superior do Android
 				mBuilder.setContentTitle("Download Cancelado")
 						.setContentText("O download da prova foi cancelado")
+						.setAutoCancel(true).setContentIntent(pend)
 						.setProgress(0, 0, false);
 				mNotifyManager.notify(listIdNotf.get(0), mBuilder.build());
+
+				// Notifica a partir do toast
 				Toast.makeText(context, R.string.downCancel,
 						Constants.TEMPO_TOAST).show();
-
 			}
+
 		}
 
 	}
@@ -348,14 +399,46 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 */
 	public void publicarFim(String result) {
 
-		notificacaoDownload(result);
+		// O download foi cancelado porque a prova a ser baixada já existe?
+		if (result == "existe") {
+
+			// Notifica a partir do alertdialog
+			alertDialog = new AlertDialog.Builder(context)
+					.setTitle("Atenção!")
+					.setMessage(R.string.existeProva)
+					.setCancelable(true)
+					.setPositiveButton("Ok",
+							new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int id) {
+									isCancelled = true;
+									removeDialogs();
+								}
+							}).show();
+
+		} //O download foi concluído ou cancelado por outro motivo? 
+		else {
+			//Publica o fim do download
+			notificacaoDownload(result);
+			removeDialogs();
+		}
+
+		
+		
+	}
+	
+	/**
+	 * Remove ou esconde os dialogs da activity
+	 */
+	private void removeDialogs(){
+		
 		mProgressDialog.hide();
 		if (alertDialog != null) {
 			alertDialog.dismiss();
 		}
-
+		
 	}
-
 }
 
 /**

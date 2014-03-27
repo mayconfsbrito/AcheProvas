@@ -23,5 +23,6 @@
 	<string name="titulo">O maior banco de provas, de vestibular e ENEM, do Brasil!</string>
 	<string name="digite">Digite abaixo o que deseja buscar:</string>
 	<string name="sair">Sair</string>
+	<string name="existeProva">Esta prova já foi baixada e está disponível para visualização.</string>
 
 </resources>

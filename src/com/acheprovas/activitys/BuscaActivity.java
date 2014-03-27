@@ -160,7 +160,7 @@ public class BuscaActivity extends SuperActivityBusca {
 									// Inicializa a activity para avaliação
 									startActivity(new Intent(
 											Intent.ACTION_VIEW,
-											Uri.parse("http://acheprovas.com/avalie")));
+											Uri.parse("market://details?id=com.acheprovas")));
 
 									// Insere no bd a informação de que o
 									// aplicativo foi validado

@@ -40,6 +40,7 @@
             android:label="@string/provas_enc"
             android:parentActivityName="com.acheprovas.activitys.BuscaActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -62,7 +62,8 @@ public class ListaBuscaActivity extends SuperActivityBusca {
 	    adView.loadAd(adRequest);
 
 		// Executa a busca da prova através de uma AsynkTask
-		new ListaProvasTask().execute();
+//		new ListaProvasTask().execute();
+		new ListaProvasTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 	}
 

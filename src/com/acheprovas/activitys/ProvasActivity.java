@@ -52,7 +52,8 @@ public class ProvasActivity extends Activity {
 		this.initComponents();
 
 		// Executa a busca da prova através de uma AsynkTask
-		new LerProvasArmazenadas(this).execute();
+		new LerProvasArmazenadas(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+		
 	}
 
 	/**
@@ -309,8 +310,8 @@ public class ProvasActivity extends Activity {
 									.setTitle("Atenção!")
 									.setMessage(
 											"Este dispositivo não tem nenhum aplicativo leitor de arquivos ZIP instalado.\n\n"
-													+ "Nós recomendamos o File Commander, sem ele ou qualquer outro leitor de arquivos ZIP não é possível visualizar as nossas provas.\n\n"
-													+ "Deseja instalar o File Comamnder? Leva só um minutinho ;)")
+													+ "Nós recomendamos o Zip Viewer, sem ele ou qualquer outro leitor de arquivos ZIP não é possível visualizar as nossas provas.\n\n"
+													+ "Deseja instalar o Zip Viewer? Leva só um minutinho ;)")
 									.setCancelable(true)
 									.setPositiveButton(
 											"Sim, quero instalar!",
@@ -328,7 +329,7 @@ public class ProvasActivity extends Activity {
 													marketIntent
 															.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 													marketIntent.setData(Uri
-															.parse("market://details?id=com.mobisystems.fileman&hl=pt_BR"));
+															.parse("market://details?id=com.hcode.zippo"));
 
 													try {
 														// Abre o Google Market
