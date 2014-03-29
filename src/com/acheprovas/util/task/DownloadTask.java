@@ -286,19 +286,23 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 */
 	private boolean jaExisteProva(Prova... prova) {
 
-		String path = Environment.getExternalStorageDirectory()
-				+ Constants.DIRETORIO_PROVAS;
-		File f = new File(path);
-		File file[] = f.listFiles();
-		Log.d(null, "");
+		try {
+			String path = Environment.getExternalStorageDirectory()
+					+ Constants.DIRETORIO_PROVAS;
+			File diretorio = new File(path);
+			diretorio.mkdirs();
+			File file[] = diretorio.listFiles();
 
-		for (int i = 0; i < file.length; i++) {
-			if (prova[0].getNome().equals(
-					((String) file[i].getName()).replaceAll(".zip", ""))) {
+			for (int i = 0; i < file.length; i++) {
+				if (prova[0].getNome().equals(
+						((String) file[i].getName()).replaceAll(".zip", ""))) {
 
-				return true;
+					return true;
+				}
+
 			}
-
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 
 		return false;
@@ -417,27 +421,25 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 								}
 							}).show();
 
-		} //O download foi concluído ou cancelado por outro motivo? 
+		} // O download foi concluído ou cancelado por outro motivo?
 		else {
-			//Publica o fim do download
+			// Publica o fim do download
 			notificacaoDownload(result);
 			removeDialogs();
 		}
 
-		
-		
 	}
-	
+
 	/**
 	 * Remove ou esconde os dialogs da activity
 	 */
-	private void removeDialogs(){
-		
+	private void removeDialogs() {
+
 		mProgressDialog.hide();
 		if (alertDialog != null) {
 			alertDialog.dismiss();
 		}
-		
+
 	}
 }
 
