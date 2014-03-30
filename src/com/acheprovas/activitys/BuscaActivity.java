@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -142,6 +143,7 @@ public class BuscaActivity extends SuperActivityBusca {
 			validacao = Integer.parseInt(cursor.getString(2));
 
 		}
+		Log.d(null, "id= " + id + " cont=" + contExecucoes + " validacao=" + validacao);
 		
 		// O usuário ainda não avaliou a app? A contagem de execucoes é divisível por 5?
 		if (validacao == 0 && (contExecucoes % 3 == 0)) {
