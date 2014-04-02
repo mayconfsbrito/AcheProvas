@@ -11,10 +11,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.acheprovas.R;
 import com.acheprovas.persistencia.dao.AbstractDAO;
@@ -62,29 +66,28 @@ public class BuscaActivity extends SuperActivityBusca {
 
 			@Override
 			public void onClick(View v) {
+				
+				buscar();
+			}
+		});
 
-				String strBusca = etBuscar.getText().toString();
+		// Declara o evento de submissão do EditText de busca
+		etBuscar.setOnEditorActionListener(new OnEditorActionListener() {
 
-				// Existe internet disponível?
-				if (isNetworkAvailable()) {
-
-					// O texto para busca foi preenchido?
-					if (strBusca.length() > 0) {
-
-						// Cria uma nova intent com a string inserida e envia
-						// para a activity de resultado de busca
-						Intent it = new Intent(getBaseContext(),
-								ListaBuscaActivity.class);
-						it.putExtra("strBusca", strBusca);
-						startActivityForResult(it, 0);
-
-					}
+			@Override
+			public boolean onEditorAction(TextView v, int actionId,
+					KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					buscar();
+					
+					return true;
 				}
+				return false;
 
 			}
 		});
 
-		// Declara o evento
+		// Declara o evento de manipulação de caracteres no EditText de busca
 		etBuscar.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -125,6 +128,32 @@ public class BuscaActivity extends SuperActivityBusca {
 	}
 
 	/**
+	 * Realiza as devidas validações do campo de busca e submete a activity de
+	 * busca
+	 */
+	public void buscar() {
+
+		String strBusca = etBuscar.getText().toString();
+
+		// Existe internet disponível?
+		if (isNetworkAvailable()) {
+
+			// O texto para busca foi preenchido?
+			if (strBusca.length() > 0) {
+
+				// Cria uma nova intent com a string inserida e envia
+				// para a activity de resultado de busca
+				Intent it = new Intent(getBaseContext(),
+						ListaBuscaActivity.class);
+				it.putExtra("strBusca", strBusca);
+				startActivityForResult(it, 0);
+
+			}
+		}
+
+	}
+
+	/**
 	 * Método executado quando o botão para voltar for pressionado
 	 */
 	@Override
@@ -132,7 +161,7 @@ public class BuscaActivity extends SuperActivityBusca {
 
 		// Inicializa variáveis
 		int id = 0;
-		
+
 		int validacao = 0;
 
 		// Consulta as informações de validação da app
@@ -143,9 +172,11 @@ public class BuscaActivity extends SuperActivityBusca {
 			validacao = Integer.parseInt(cursor.getString(2));
 
 		}
-		Log.d(null, "id= " + id + " cont=" + contExecucoes + " validacao=" + validacao);
-		
-		// O usuário ainda não avaliou a app? A contagem de execucoes é divisível por 5?
+		Log.d(null, "id= " + id + " cont=" + contExecucoes + " validacao="
+				+ validacao);
+
+		// O usuário ainda não avaliou a app? A contagem de execucoes é
+		// divisível por 5?
 		if (validacao == 0 && (contExecucoes % 3 == 0)) {
 
 			// Exibe um AlertDialog solicitando ao usuario para avaliar a app
@@ -170,8 +201,7 @@ public class BuscaActivity extends SuperActivityBusca {
 											BuscaActivity.this);
 									ContentValues cv = new ContentValues();
 									cv.put("validacao", 1);
-									dao.alterar("informacoes",
-											cv, "id=1", null);
+									dao.alterar("informacoes", cv, "id=1", null);
 
 								}
 							})
@@ -181,49 +211,48 @@ public class BuscaActivity extends SuperActivityBusca {
 								@Override
 								public void onClick(DialogInterface dialog,
 										int which) {
-									
-									//Conta a execução
+
+									// Conta a execução
 									contaExecucao();
-									
+
 									// Finaliza a activity
 									finish();
 								}
 							}).show();
-		} // Contabiliza a execução do aplicativo 
+		} // Contabiliza a execução do aplicativo
 		else {
-			
-			//Conta a execução
+
+			// Conta a execução
 			contaExecucao();
-			
+
 			// Finaliza a activity
 			finish();
 		}
 
 	}
-	
+
 	/**
 	 * Consulta o bd para saber as informações de execução da apk
+	 * 
 	 * @return
 	 */
-	public Cursor consultaValidacao(){
+	public Cursor consultaValidacao() {
 		AbstractDAO dao = new AbstractDAO(BuscaActivity.this);
 		Cursor cursor = dao.consultar("informacoes", null, "id=1", null);
-		
+
 		return cursor;
 	}
-	
+
 	/**
 	 * Armazena no bd mais uma execução da apk
 	 */
-	public void contaExecucao(){
+	public void contaExecucao() {
 		// Insere no bd a informação de que o
 		// aplicativo foi executado
-		AbstractDAO dao = new AbstractDAO(
-				BuscaActivity.this);
+		AbstractDAO dao = new AbstractDAO(BuscaActivity.this);
 		ContentValues cv = new ContentValues();
 		cv.put("contExecucoes", ++contExecucoes);
-		dao.alterar("informacoes",
-				cv, "id=1", null);
+		dao.alterar("informacoes", cv, "id=1", null);
 	}
 
 	/**
