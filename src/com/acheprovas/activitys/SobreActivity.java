@@ -40,7 +40,6 @@ public class SobreActivity extends Activity {
 						+ "<br /><br /><b>Desenvolvimento:</b>"
 						+ "<br />Maycon Brito e Flávia Viana"
 						+ "<br /><a href='https://github.com/mayconfsbrito/'>https://github.com/mayconfsbrito/</a>"
-						+ "<br /><a href='https://github.com/flaviafviana/'>https://github.com/flaviafviana/</a>"
 						+ "<br /><br /><b>Maiores informações e contato:</b>"
 						+ "<br /><a href='http://acheprovas.com/'>http://acheprovas.com/</a>"
 						+ "<br /><br />Obrigador por utilizar!"
