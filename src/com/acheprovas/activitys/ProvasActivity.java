@@ -310,8 +310,8 @@ public class ProvasActivity extends Activity {
 									.setTitle("Atenção!")
 									.setMessage(
 											"Este dispositivo não tem nenhum aplicativo leitor de arquivos ZIP instalado.\n\n"
-													+ "Nós recomendamos o Zip Viewer, sem ele ou qualquer outro leitor de arquivos ZIP não é possível visualizar as nossas provas.\n\n"
-													+ "Deseja instalar o Zip Viewer? Leva só um minutinho ;)")
+													+ "Nós recomendamos o WinZip, sem ele ou qualquer outro leitor de arquivos ZIP não é possível visualizar as nossas provas.\n\n"
+													+ "Deseja instalar o WinZip? Leva só um minutinho ;)")
 									.setCancelable(true)
 									.setPositiveButton(
 											"Sim, quero instalar!",
@@ -329,7 +329,7 @@ public class ProvasActivity extends Activity {
 													marketIntent
 															.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 													marketIntent.setData(Uri
-															.parse("market://details?id=com.hcode.zippo"));
+															.parse("market://details?id=com.winzip.android"));
 
 													try {
 														// Abre o Google Market

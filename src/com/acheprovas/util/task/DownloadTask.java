@@ -12,7 +12,6 @@ import java.util.Random;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -187,7 +186,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 			// Deleta o arquivo gravado no disco
 			arquivo.delete();
-			return "Não foi possível gravar o arquivo no dispositivo!";
+			return "Problema de armazenamento, verifique a memória do dispositivo!";
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -324,7 +323,6 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 	 */
 	@Override
 	protected void onPostExecute(String result) {
-
 		this.publicarFim(result);
 	}
 
@@ -352,38 +350,48 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 
 		if (mBuilder != null && mNotifyManager != null) {
 
+			// Inicializa variáveis de strings a serem exibidas nas notificações
+			String contTitle = null;
+			String contText = null;
+			CharSequence toast = null;
+
 			// Prepara um trigger caso a notificação seja selecionada
 			Intent it = new Intent(context, ProvasActivity.class);
 			PendingIntent pend = PendingIntent.getActivity(context, 0, it, 0);
 
 			// O download foi concluído?
-			if (!this.isCancelled) {
+			if (!this.isCancelled && result == null) {
 
-				// Notifica a partir da barra superior do Android
-				mBuilder.setContentTitle("Download Concluído")
-						.setContentText(
-								"Download da prova concluído com sucesso")
-						.setAutoCancel(true).setContentIntent(pend)
-						.setProgress(0, 0, false);
-				mNotifyManager.notify(listIdNotf.get(0), mBuilder.build());
+				contTitle = "Download Concluído";
+				contText = "Download da prova concluído com sucesso";
+				toast = context.getString(R.string.downConcl);
 
-				// Notifica a partir do toast
-				Toast.makeText(context, R.string.downConcl,
-						Constants.TEMPO_TOAST).show();
+			}// O download foi abortado?
+			else if (!this.isCancelled) {
 
-			}// O Download não foi concluído?
+				contTitle = "Download Abortado";
+				contText = "Download abortado. Motivo:" + result;
+				toast = "Download abortado. Motivo:" + result;
+
+			}// O Download foi cancelado?
 			else {
-				// Notifica a partir da barra superior do Android
-				mBuilder.setContentTitle("Download Cancelado")
-						.setContentText("O download da prova foi cancelado")
-						.setAutoCancel(true).setContentIntent(pend)
-						.setProgress(0, 0, false);
-				mNotifyManager.notify(listIdNotf.get(0), mBuilder.build());
 
-				// Notifica a partir do toast
-				Toast.makeText(context, R.string.downCancel,
-						Constants.TEMPO_TOAST).show();
+				contTitle = "Download Cancelado";
+				contText = "O download da prova foi cancelado";
+				toast = context.getString(R.string.downCancel);
+
 			}
+
+			// Notifica a partir da barra superior do Android
+			mBuilder.setContentTitle(contTitle)
+					.setContentText(contText)
+					.setAutoCancel(true).setContentIntent(pend)
+					.setProgress(0, 0, false);
+			mNotifyManager.notify(listIdNotf.get(0), mBuilder.build());
+			
+			// Notifica a partir do toast
+			Toast.makeText(context, toast,
+					Constants.TEMPO_TOAST + 1000).show();
 
 		}
 
