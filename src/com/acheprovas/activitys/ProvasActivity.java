@@ -17,7 +17,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,6 +31,7 @@ import android.widget.Toast;
 import com.acheprovas.R;
 import com.acheprovas.activitys.adapters.ArrayAdapterProvas;
 import com.acheprovas.libs.Constants;
+import com.google.analytics.tracking.android.EasyTracker;
 
 @SuppressLint({ "NewApi", "ShowToast" })
 public class ProvasActivity extends Activity {
@@ -54,6 +54,24 @@ public class ProvasActivity extends Activity {
 		// Executa a busca da prova através de uma AsynkTask
 		new LerProvasArmazenadas(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 		
+	}
+	
+	/**
+	 * Sobrescreve o método onStart para inserir o GoogleAnalytics através do EasyTracker 
+	 */
+	@Override
+	  public void onStart() {
+	    super.onStart();
+	    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+	  }
+	
+	/**
+	 * Sobrescreve o método onStop para inserir o GoogleAnalytics através do EasyTracker
+	 */
+	@Override
+	  public void onStop() {
+	    super.onStop();
+	    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
 	}
 
 	/**

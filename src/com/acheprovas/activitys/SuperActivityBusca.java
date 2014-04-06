@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.acheprovas.R;
 import com.acheprovas.R.string;
 import com.acheprovas.libs.Constants;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * Super classe abstrata para implementação de activity de busca
@@ -36,6 +37,24 @@ public abstract class SuperActivityBusca extends Activity {
 		inflater.inflate(R.menu.busca_activity_actions, menu);
 
 		return super.onCreateOptionsMenu(menu);
+	}
+	
+	/**
+	 * Sobrescreve o método onStart para inserir o GoogleAnalytics através do EasyTracker 
+	 */
+	@Override
+	  public void onStart() {
+	    super.onStart();
+	    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+	  }
+	
+	/**
+	 * Sobrescreve o método onStop para inserir o GoogleAnalytics através do EasyTracker
+	 */
+	@Override
+	  public void onStop() {
+	    super.onStop();
+	    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
 	}
 
 	/**

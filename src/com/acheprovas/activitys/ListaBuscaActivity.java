@@ -28,6 +28,7 @@ import com.acheprovas.libs.Constants;
 import com.acheprovas.model.Prova;
 import com.acheprovas.util.json.JSONParser;
 import com.acheprovas.util.task.DownloadTask;
+import com.google.analytics.tracking.android.EasyTracker;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 
@@ -66,7 +67,7 @@ public class ListaBuscaActivity extends SuperActivityBusca {
 		new ListaProvasTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
 	}
-
+	
 	/**
 	 * Sobrescrita de método
 	 */

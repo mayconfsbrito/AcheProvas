@@ -10,6 +10,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.acheprovas.R;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * Activity com informações "sobre" o aplicativo
@@ -49,6 +50,24 @@ public class SobreActivity extends Activity {
 		WebSettings settings = webView.getSettings();
 		settings.setDefaultTextEncodingName("utf-8");
 		webView.loadDataWithBaseURL(null, texto, "text/html", "utf-8", null);
+	}
+	
+	/**
+	 * Sobrescreve o método onStart para inserir o GoogleAnalytics através do EasyTracker 
+	 */
+	@Override
+	  public void onStart() {
+	    super.onStart();
+	    EasyTracker.getInstance(this).activityStart(this);  // Add this method.
+	  }
+	
+	/**
+	 * Sobrescreve o método onStop para inserir o GoogleAnalytics através do EasyTracker
+	 */
+	@Override
+	  public void onStop() {
+	    super.onStop();
+	    EasyTracker.getInstance(this).activityStop(this);  // Add this method.
 	}
 	
 	/**
