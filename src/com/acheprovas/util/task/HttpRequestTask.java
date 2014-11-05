@@ -37,7 +37,7 @@ public class HttpRequestTask extends
 		ArrayList<HashMap<String, String>> listProvas = null;
 
 		// Monta a URL
-		String strUrl = "http://acheprovas.com/api/api.php?termo="
+		String strUrl = "https://acheprovas.com/api/api.php?termo="
 				+ this.strBusca + "&enviar=Buscar+prova";
 
 		try {

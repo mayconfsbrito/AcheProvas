@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -172,7 +173,7 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			// Faz uma requisição ao servidor para informar a conclusão do
 			// download
 			// para efeitos estatísticos do servidor
-			String urlCount = "http://api.acheprovas.com/counter.php?id_prova="
+			String urlCount = "https://acheprovas.com/counter.php?id_prova="
 					+ prova[0].getId() + "&origem=3";
 			url = new URL(urlCount);
 			connection = (HttpURLConnection) url.openConnection();
@@ -181,6 +182,14 @@ public class DownloadTask extends AsyncTask<Prova, Integer, String> {
 			connection.connect();
 			connection.getResponseCode();
 
+		} catch(UnknownHostException e){
+			e.printStackTrace();
+
+			// Deleta o arquivo gravado no disco
+			arquivo.delete();
+			return "Erro na conexão com o servidor!";
+
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 

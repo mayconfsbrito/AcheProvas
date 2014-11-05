@@ -1,16 +1,12 @@
 package com.acheprovas.activitys;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -149,84 +145,6 @@ public class BuscaActivity extends SuperActivityBusca {
 				startActivityForResult(it, 0);
 
 			}
-		}
-
-	}
-
-	/**
-	 * Método executado quando o botão para voltar for pressionado
-	 */
-	@Override
-	public void onBackPressed() {
-
-		// Inicializa variáveis
-		int id = 0;
-
-		int validacao = 0;
-
-		// Consulta as informações de validação da app
-		Cursor cursor = this.consultaValidacao();
-		if (cursor != null && !cursor.isAfterLast()) {
-			id = Integer.parseInt(cursor.getString(0));
-			contExecucoes = Integer.parseInt(cursor.getString(1));
-			validacao = Integer.parseInt(cursor.getString(2));
-
-		}
-		Log.d(null, "id= " + id + " cont=" + contExecucoes + " validacao="
-				+ validacao);
-
-		// O usuário ainda não avaliou a app? A contagem de execucoes é
-		// divisível por 5?
-		if (validacao == 0 && (contExecucoes % 3 == 0)) {
-
-			// Exibe um AlertDialog solicitando ao usuario para avaliar a app
-			new AlertDialog.Builder(this)
-					.setTitle("Vai não... É cedo uai!")
-					.setMessage(
-							"Antes de partir, deixe sua avaliação para nosso aplicativo!\n\nÉ 1 minutinho!\n\n;)")
-					.setCancelable(true)
-					.setNegativeButton("Quero avaliar!",
-							new DialogInterface.OnClickListener() {
-								public void onClick(DialogInterface dialog,
-										int id) {
-
-									// Inicializa a activity para avaliação
-									startActivity(new Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("market://details?id=com.acheprovas")));
-
-									// Insere no bd a informação de que o
-									// aplicativo foi validado
-									AbstractDAO dao = new AbstractDAO(
-											BuscaActivity.this);
-									ContentValues cv = new ContentValues();
-									cv.put("validacao", 1);
-									dao.alterar("informacoes", cv, "id=1", null);
-
-								}
-							})
-					.setPositiveButton("Lembre-me mais tarde.",
-							new DialogInterface.OnClickListener() {
-
-								@Override
-								public void onClick(DialogInterface dialog,
-										int which) {
-
-									// Conta a execução
-									contaExecucao();
-
-									// Finaliza a activity
-									finish();
-								}
-							}).show();
-		} // Contabiliza a execução do aplicativo
-		else {
-
-			// Conta a execução
-			contaExecucao();
-
-			// Finaliza a activity
-			finish();
 		}
 
 	}

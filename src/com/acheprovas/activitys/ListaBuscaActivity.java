@@ -114,7 +114,7 @@ public class ListaBuscaActivity extends SuperActivityBusca {
 		ArrayList<HashMap<String, String>> listProvas = null;
 
 		// Monta a URL
-		String strUrl = "http://acheprovas.com/api/api.php?termo=" + strBusca
+		String strUrl = "https://acheprovas.com/api/api.php?termo=" + strBusca
 				+ "&enviar=Buscar+prova";
 
 		try {
